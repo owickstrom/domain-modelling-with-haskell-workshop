@@ -6,6 +6,7 @@ index.html: workshop/workshop.rst Makefile workshop/workshop.js.html
 		--css workshop/style.css \
 		--css workshop/iosevka/iosevka.css \
 		--css 'https://fonts.googleapis.com/css?family=Source+Sans+Pro' \
+		--highlight-style haddock \
 		--toc \
 		--mathml \
 		--base-header-level=2 \

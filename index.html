@@ -46,35 +46,30 @@ div.sourceCode
 @media screen {
 a.sourceLine::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
 code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
 code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
   </style>
   <link rel="stylesheet" href="workshop/style.css">
   <link rel="stylesheet" href="workshop/iosevka/iosevka.css">
@@ -168,20 +163,11 @@ Collecting type info for 1 module(s) ...</code></pre>
 <p>By wrapping in a newtype, instead of using a &quot;raw&quot; numeric type or a type alias, you make it safer to pass around in the code, as it cannot be mistakenly interchanged with other integers.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">newtype</span> <span class="dt">ProjectId</span> <span class="fu">=</span> <span class="dt">ProjectId</span> {<span class="ot"> unProjectId ::</span> <span class="dt">Int</span> }</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">  <span class="kw">deriving</span> (<span class="dt">Eq</span>, <span class="dt">Show</span>)</a></code></pre></div>
-</div>
-<div class="tip">
-<div class="admonition-title">
-<p>Tip</p>
-</div>
-<p>To construct project IDs using numeric literals, you can derive the <code>Num</code> class:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="ot">{-# LANGUAGE GeneralizedNewtypeDeriving #-}</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">module</span> <span class="dt">Project</span> <span class="kw">where</span></a>
+<p>The following code would then cause a type error.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="ot">pId ::</span> <span class="dt">ProjectId</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">pId <span class="fu">=</span> <span class="dt">ProjectId</span> <span class="dv">123</span></a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="kw">newtype</span> <span class="dt">ProjectId</span> <span class="fu">=</span> <span class="dt">ProjectId</span> {<span class="ot"> unProjectId ::</span> <span class="dt">Int</span> }</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">  <span class="kw">deriving</span> (<span class="dt">Eq</span>, <span class="dt">Show</span>, <span class="dt">Num</span>)</a></code></pre></div>
-<p>This enables you to write:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="ot">pId ::</span> <span class="dt">ProjectId</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">pId <span class="fu">=</span> <span class="dv">123</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-4" data-line-number="4">ohNo <span class="fu">=</span> pId <span class="fu">*</span> <span class="dv">4</span></a></code></pre></div>
 </div>
 <h3 id="budget">Budget</h3>
 <p>A budget describes the expected <em>income</em> and <em>expenditure</em> for a project, both being monetary values.</p>
@@ -190,10 +176,10 @@ Collecting type info for 1 module(s) ...</code></pre>
 <p>Tip</p>
 </div>
 <p>A Haskell data type with multiple fields can be expressed using record syntax:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Budget</span> <span class="fu">=</span> <span class="dt">Budget</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">  {<span class="ot"> budgetIncome ::</span> <span class="dt">Money</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">  ,<span class="ot"> budgetExpenditure ::</span> <span class="dt">Money</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">  } <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Budget</span> <span class="fu">=</span> <span class="dt">Budget</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">  {<span class="ot"> budgetIncome ::</span> <span class="dt">Money</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  ,<span class="ot"> budgetExpenditure ::</span> <span class="dt">Money</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">  } <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>)</a></code></pre></div>
 </div>
 <h3 id="transaction">Transaction</h3>
 <p>A transaction is a very simplified concept describing a <em>sale</em> or a <em>purchase</em>. Each type of transaction has an amount (a monetary value.)</p>
@@ -209,14 +195,14 @@ Collecting type info for 1 module(s) ...</code></pre>
 <div class="admonition-title">
 <p>Tip</p>
 </div>
-<p>Create a <code>newtype</code> for monetary values by wrapping the <code>Decimal</code> type (from the <em>Decimal</em> library):</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">module</span> <span class="dt">Project</span> <span class="kw">where</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Data.Decimal</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="kw">newtype</span> <span class="dt">Money</span> <span class="fu">=</span> <span class="dt">Money</span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6">  {<span class="ot"> unMoney ::</span> <span class="dt">Decimal</span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7">  } <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>, <span class="dt">Num</span>)</a></code></pre></div>
+<p>Create a <code>newtype</code> for monetary values by wrapping the <code>Decimal</code> type:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">module</span> <span class="dt">Project</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Data.Decimal</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="kw">newtype</span> <span class="dt">Money</span> <span class="fu">=</span> <span class="dt">Money</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">  {<span class="ot"> unMoney ::</span> <span class="dt">Decimal</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7">  } <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>, <span class="dt">Num</span>)</a></code></pre></div>
 </div>
 <h3 id="get-budget-by-project-id">Get Budget by Project ID</h3>
 <p>Given a project ID, we need to be able to retrieve a budget for the corresponding project.</p>
@@ -225,7 +211,7 @@ Collecting type info for 1 module(s) ...</code></pre>
 <p>Note</p>
 </div>
 <p>To save time, hard-code or generate a random result, instead of using a real persistent database. The function should still return <code>IO</code>, e.g:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="ot">getBudget ::</span> <span class="dt">ProjectId</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Budget</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="ot">getBudget ::</span> <span class="dt">ProjectId</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Budget</span></a></code></pre></div>
 </div>
 <h3 id="get-transactions-by-project-id">Get Transactions by Project ID</h3>
 <p>Given a project ID, we need to be able to retrieve a list of transactions for the corresponding project.</p>
@@ -234,7 +220,7 @@ Collecting type info for 1 module(s) ...</code></pre>
 <p>Note</p>
 </div>
 <p>To save time, hard-code or generate a random result, instead of using a real persistent database or querying an external system. The function should still return <code>IO</code>, e.g:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="ot">getTransactions ::</span> <span class="dt">ProjectId</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> [<span class="dt">Transaction</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="ot">getTransactions ::</span> <span class="dt">ProjectId</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> [<span class="dt">Transaction</span>]</a></code></pre></div>
 </div>
 <h3 id="report">Report</h3>
 <p>A report represents the result of the <em>report calculation</em>. It has a <em>budget profit</em>, a <em>net profit</em>, and a <em>difference</em>, all being monetary values.</p>
@@ -246,7 +232,7 @@ Collecting type info for 1 module(s) ...</code></pre>
 <p>Note</p>
 </div>
 <p>The report calculation function should be a pure function, with a Haskell type signature like:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="ot">calculateReport ::</span> <span class="dt">Budget</span> <span class="ot">-&gt;</span> [<span class="dt">Transaction</span>] <span class="ot">-&gt;</span> <span class="dt">Report</span></a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="ot">calculateReport ::</span> <span class="dt">Budget</span> <span class="ot">-&gt;</span> [<span class="dt">Transaction</span>] <span class="ot">-&gt;</span> <span class="dt">Report</span></a></code></pre></div>
 </div>
 <h3 id="calculate-project-report">Calculate Project Report</h3>
 <p>Given a project, this function calculates a single aggregated <a href="#report">Report</a> for the entire project hierarchy. It needs to recursively walk the projects, query their budgets and transactions, calculate reports, and combine those reports into one.</p>
@@ -254,8 +240,8 @@ Collecting type info for 1 module(s) ...</code></pre>
 <div class="admonition-title">
 <p>Note</p>
 </div>
-<p>The project report calculation function return <code>IO Report</code>, e.g.:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="ot">calculateProjectReport ::</span> <span class="dt">Project</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Report</span></a></code></pre></div>
+<p>The project report calculation function returns <code>IO Report</code>, e.g.:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="ot">calculateProjectReport ::</span> <span class="dt">Project</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Report</span></a></code></pre></div>
 <p>Use the (fake) queries you wrote earlier to obtain a budget and a list of transactions for each project.</p>
 </div>
 <div class="tip">
@@ -263,24 +249,24 @@ Collecting type info for 1 module(s) ...</code></pre>
 <p>Tip</p>
 </div>
 <p>Create an instance of <code>Monoid</code> for <code>Report</code> and use it to combine reports:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">instance</span> <span class="dt">Monoid</span> <span class="dt">Report</span> <span class="kw">where</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">  mempty <span class="fu">=</span> <span class="dt">Report</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3">  mappend (<span class="dt">Report</span> b1 n1 d1) (<span class="dt">Report</span> b2 n2 d2) <span class="fu">=</span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4">    <span class="dt">Report</span> (b1 <span class="fu">+</span> b2) (n1 <span class="fu">+</span> n2) (d1 <span class="fu">+</span> d2)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">instance</span> <span class="dt">Monoid</span> <span class="dt">Report</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">  mempty <span class="fu">=</span> <span class="dt">Report</span> <span class="dv">0</span> <span class="dv">0</span> <span class="dv">0</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">  mappend (<span class="dt">Report</span> b1 n1 d1) (<span class="dt">Report</span> b2 n2 d2) <span class="fu">=</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">    <span class="dt">Report</span> (b1 <span class="fu">+</span> b2) (n1 <span class="fu">+</span> n2) (d1 <span class="fu">+</span> d2)</a></code></pre></div>
 <p>Now you can combine a list of reports using <code>fold</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="ot">megaReport ::</span> <span class="dt">Report</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2">megaReport <span class="fu">=</span> fold [report1, report2, report3]</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="ot">megaReport ::</span> <span class="dt">Report</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">megaReport <span class="fu">=</span> fold [report1, report2, report3]</a></code></pre></div>
 </div>
 <div class="tip">
 <div class="admonition-title">
 <p>Tip</p>
 </div>
-<p>Recurse through the project hierarchy using by pattern matching on the constructors,</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="ot">calculateProjectReport ::</span> <span class="dt">Project</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Report</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">calculateProjectReport (<span class="dt">SingleProject</span> projectId _) <span class="fu">=</span> <span class="fu">...</span></a>
-<a class="sourceLine" id="cb18-3" data-line-number="3">calculateProjectReport (<span class="dt">ProjectGroup</span> _ projects) <span class="fu">=</span> <span class="fu">...</span></a></code></pre></div>
+<p>Recurse through the project hierarchy by pattern matching on the constructors,</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="ot">calculateProjectReport ::</span> <span class="dt">Project</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Report</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">calculateProjectReport (<span class="dt">SingleProject</span> projectId _) <span class="fu">=</span> <span class="fu">...</span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3">calculateProjectReport (<span class="dt">ProjectGroup</span> _ projects) <span class="fu">=</span> <span class="fu">...</span></a></code></pre></div>
 <p>and by folding the result of recursively applying <code>calculateProjectReport</code> on project group children:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb19-1" data-line-number="1">foldMap calculateProjectReport <span class="fu">&lt;</span>child projects<span class="fu">&gt;</span></a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb18-1" data-line-number="1">foldMap calculateProjectReport _childProjects</a></code></pre></div>
 </div>
 <h3 id="testing-it-all-out">Testing it all out</h3>
 <p>Whew! Those are all the things needed in the project management system. To have some data to try report calculation on, create a <code>someProject</code> definition of type <code>Project</code>. You may construct this value however you like, but make sure to have at least three levels of project groups.</p>
@@ -289,14 +275,14 @@ Collecting type info for 1 module(s) ...</code></pre>
 <p>Tip</p>
 </div>
 <p>As an example of a project value, the following represents a Swedish project hierarchy of some sort.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="ot">someProject ::</span> <span class="dt">Project</span></a>
-<a class="sourceLine" id="cb20-2" data-line-number="2">someProject <span class="fu">=</span> <span class="dt">ProjectGroup</span> <span class="st">&quot;Sweden&quot;</span> [stockholm, gothenburg, malmo]</a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">  <span class="kw">where</span></a>
-<a class="sourceLine" id="cb20-4" data-line-number="4">    stockholm <span class="fu">=</span> <span class="dt">Project</span> <span class="dv">1</span> <span class="st">&quot;Stockholm&quot;</span></a>
-<a class="sourceLine" id="cb20-5" data-line-number="5">    gothenburg <span class="fu">=</span> <span class="dt">Project</span> <span class="dv">2</span> <span class="st">&quot;Gothenburg&quot;</span></a>
-<a class="sourceLine" id="cb20-6" data-line-number="6">    malmo <span class="fu">=</span> <span class="dt">ProjectGroup</span> <span class="st">&quot;malmo&quot;</span> [city, limhamn]</a>
-<a class="sourceLine" id="cb20-7" data-line-number="7">    city <span class="fu">=</span> <span class="dt">Project</span> <span class="dv">3</span> <span class="st">&quot;malmo City&quot;</span></a>
-<a class="sourceLine" id="cb20-8" data-line-number="8">    limhamn <span class="fu">=</span> <span class="dt">Project</span> <span class="dv">4</span> <span class="st">&quot;Limhamn&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="ot">someProject ::</span> <span class="dt">Project</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">someProject <span class="fu">=</span> <span class="dt">ProjectGroup</span> <span class="st">&quot;Sweden&quot;</span> [stockholm, gothenburg, malmo]</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb19-4" data-line-number="4">    stockholm <span class="fu">=</span> <span class="dt">Project</span> (<span class="dt">ProjectId</span> <span class="dv">1</span>) <span class="st">&quot;Stockholm&quot;</span></a>
+<a class="sourceLine" id="cb19-5" data-line-number="5">    gothenburg <span class="fu">=</span> <span class="dt">Project</span> (<span class="dt">ProjectId</span> <span class="dv">2</span>) <span class="st">&quot;Gothenburg&quot;</span></a>
+<a class="sourceLine" id="cb19-6" data-line-number="6">    malmo <span class="fu">=</span> <span class="dt">ProjectGroup</span> <span class="st">&quot;malmo&quot;</span> [city, limhamn]</a>
+<a class="sourceLine" id="cb19-7" data-line-number="7">    city <span class="fu">=</span> <span class="dt">Project</span> (<span class="dt">ProjectId</span> <span class="dv">3</span>) <span class="st">&quot;Malmo City&quot;</span></a>
+<a class="sourceLine" id="cb19-8" data-line-number="8">    limhamn <span class="fu">=</span> <span class="dt">Project</span> (<span class="dt">ProjectId</span> <span class="dv">4</span>) <span class="st">&quot;Limhamn&quot;</span></a></code></pre></div>
 </div>
 <p>Now, apply the report calculation function to the demo project. Do you get a single report back?</p>
 <div class="tip">
@@ -312,14 +298,14 @@ Money {unMoney = 7584.020748778671}}</code></pre>
 </div>
 <p>Congratulations! You have completed the first part of &quot;Domain Modelling with Haskell.&quot;</p>
 <h2 id="digging-deeper">Digging Deeper</h2>
-<p>This workshop is based on the video series from Haskell at Work, including four videos corresponding to the parts in the workshop:</p>
+<p>This workshop is based on the video series from Haskell at Work:</p>
 <ol type="1">
 <li><a href="https://haskell-at-work.com/episodes/2018-01-19-domain-modelling-with-haskell-data-structures.html">Data Structures</a></li>
 <li><a href="https://haskell-at-work.com/episodes/2018-01-22-domain-modelling-with-haskell-generalizing-with-foldable-and-traversable.html">Generalizing with Foldable and Traversable</a></li>
 <li><a href="https://haskell-at-work.com/episodes/2018-02-02-domain-modelling-with-haskell-accumulating-with-writert.html">Accumulating with WriterT</a></li>
 <li><a href="https://haskell-at-work.com/episodes/2018-02-11-domain-modelling-with-haskell-factoring-out-recursion.html">Factoring Out Recursion</a></li>
 </ol>
-<p>If you want to explore further, I can recommend checking out those videos and the show notes. Also, the full source code for the videos is available at <a href="https://github.com/haskell-at-work/domain-modelling-with-haskell" class="uri">https://github.com/haskell-at-work/domain-modelling-with-haskell</a>.</p>
+<p><strong>Parts 2-4 have not been added to this workshop yet.</strong> If you want to explore further, I can recommend checking out those videos and the show notes. Also, the full source code for the videos is available at <a href="https://github.com/haskell-at-work/domain-modelling-with-haskell" class="uri">https://github.com/haskell-at-work/domain-modelling-with-haskell</a>.</p>
 <script>
 document.querySelectorAll('.tip').forEach(function (tip) {
   tip.addEventListener('click', function () {

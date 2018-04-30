@@ -148,25 +148,14 @@ project) in the system.
       newtype ProjectId = ProjectId { unProjectId :: Int }
         deriving (Eq, Show)
 
-.. tip::
-
-   To construct project IDs using numeric literals, you can derive
-   the ``Num`` class:
-
-   .. code:: haskell
-
-      {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-      module Project where
-
-      newtype ProjectId = ProjectId { unProjectId :: Int }
-        deriving (Eq, Show, Num)
-
-   This enables you to write:
+   The following code would then cause a type error.
 
    .. code:: haskell
 
       pId :: ProjectId
-      pId = 123
+      pId = ProjectId 123
+
+      ohNo = pId * 4
 
 Budget
 ~~~~~~
@@ -205,7 +194,7 @@ A representation of monetary values.
 .. tip::
 
    Create a ``newtype`` for monetary values by wrapping the
-   ``Decimal`` type (from the *Decimal* library):
+   ``Decimal`` type:
 
    .. code:: haskell
 
@@ -290,7 +279,7 @@ combine those reports into one.
 
 .. note::
 
-   The project report calculation function return ``IO Report``, e.g.:
+   The project report calculation function returns ``IO Report``, e.g.:
 
    .. code:: haskell
 
@@ -320,8 +309,8 @@ combine those reports into one.
 
 .. tip::
 
-   Recurse through the project hierarchy using by pattern matching
-   on the constructors,
+   Recurse through the project hierarchy by pattern matching on the
+   constructors,
 
    .. code:: haskell
 
@@ -334,7 +323,7 @@ combine those reports into one.
 
    .. code:: haskell
 
-      foldMap calculateProjectReport <child projects>
+      foldMap calculateProjectReport _childProjects
 
 Testing it all out
 ~~~~~~~~~~~~~~~~~~
@@ -355,11 +344,11 @@ levels of project groups.
              someProject :: Project
              someProject = ProjectGroup "Sweden" [stockholm, gothenburg, malmo]
                where
-                 stockholm = Project 1 "Stockholm"
-                 gothenburg = Project 2 "Gothenburg"
+                 stockholm = Project (ProjectId 1) "Stockholm"
+                 gothenburg = Project (ProjectId 2) "Gothenburg"
                  malmo = ProjectGroup "malmo" [city, limhamn]
-                 city = Project 3 "malmo City"
-                 limhamn = Project 4 "Limhamn"
+                 city = Project (ProjectId 3) "Malmo City"
+                 limhamn = Project (ProjectId 4) "Limhamn"
 
 Now, apply the report calculation function to the demo project. Do
 you get a single report back?
@@ -383,15 +372,15 @@ Modelling with Haskell."
 Digging Deeper
 --------------
 
-This workshop is based on the video series from Haskell at Work,
-including four videos corresponding to the parts in the workshop:
+This workshop is based on the video series from Haskell at Work:
 
 1. `Data Structures <https://haskell-at-work.com/episodes/2018-01-19-domain-modelling-with-haskell-data-structures.html>`_
 1. `Generalizing with Foldable and Traversable <https://haskell-at-work.com/episodes/2018-01-22-domain-modelling-with-haskell-generalizing-with-foldable-and-traversable.html>`_
 1. `Accumulating with WriterT <https://haskell-at-work.com/episodes/2018-02-02-domain-modelling-with-haskell-accumulating-with-writert.html>`_
 1. `Factoring Out Recursion <https://haskell-at-work.com/episodes/2018-02-11-domain-modelling-with-haskell-factoring-out-recursion.html>`_
 
-If you want to explore further, I can recommend checking out those
-videos and the show notes. Also, the full source code for the videos
-is available at
+**Parts 2-4 have not been added to this workshop yet.** If you want to
+explore further, I can recommend checking out those videos and the
+show notes. Also, the full source code for the videos is available
+at
 https://github.com/haskell-at-work/domain-modelling-with-haskell.
