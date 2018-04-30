@@ -3,12 +3,12 @@ html, body {
 }
 body {
   font-family: 'Source Sans Pro', sans-serif;
-  max-width: 600px;
+  max-width: 650px;
   margin: 0 auto;
   padding: 10px;
 
   line-height: 1.5;
-  font-size: 16px;
+  font-size: 17px;
 
   color: #111;
   -webkit-text-size-adjust: 100%;
@@ -44,6 +44,7 @@ ol li {
 pre,
 code {
   font-family: 'Iosevka', monospace;
+  font-size: 16px;
   line-height: inherit;
   color: #111;
 }
@@ -184,33 +185,36 @@ footer li:first-child:before {
 }
 
 div.sourceCode {
-  padding: 1em;
+  margin: 1em;
+}
+
+code span.dt {
+  text-decoration: none;
+  font-style: italic;
 }
 
 .admonition-title {
   text-transform: uppercase;
   font-family: sans-serif;
   font-weight: bold;
-  font-size: 90%;
+  font-size: 80%;
   letter-spacing: .05em;
   margin: 0;
 }
 
 .note {
-  font-size: 80%;
   background: #fafad2;
   border: 1px dashed #8b8b00;
   padding: .5em 1em;
   margin-bottom: 1em;
 }
 
-.tip div.sourceCode,
-.note div.sourceCode {
+.tip pre.sourceCode,
+.note pre.sourceCode {
   padding: 0;
 }
 
 .tip {
-  font-size: 80%;
   background: #d0ffd0;
   border: 1px dashed #32cd32;
   padding: .5em 1em;
@@ -232,8 +236,8 @@ div.sourceCode {
 .tip .admonition-title p:after {
   content: '(click to toggle)';
   float: right;
-  font-size: 75%;
   font-weight: normal;
+  font-size: 80%;
   display: inline;
 }
 

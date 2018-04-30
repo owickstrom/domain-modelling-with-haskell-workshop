@@ -41,7 +41,6 @@ local machine:
 .. code:: sh
 
     $ git clone https://github.com/owickstrom/domain-modelling-with-haskell-workshop.git
-    ...
     $ cd domain-modelling-with-haskell-workshop
 
 Then, install all dependencies required, and build the project:
@@ -63,8 +62,8 @@ Setting up Haskell tooling is way out of the scope of this workshop, and
 you will not need anything fancy. We will load and test the code in GHCi
 (a REPL) anyway.
 
-How to follow this tutorial
----------------------------
+Editing Workflow
+----------------
 
 When you are done with the setup, begin by running the following
 command in your terminal. It will start GHCi and load the `Project`
@@ -271,7 +270,7 @@ Implementation
 
 :Calculate Project Report:
 
-   Given a project, this function calculates a single aggregated `Report`_
+   Given a project, this function calculates a single aggregated report
    for the entire project hierarchy. It needs to recursively walk the
    projects, query their budgets and transactions, calculate reports, and
    combine those reports into one.
@@ -314,8 +313,8 @@ Implementation
       .. code:: haskell
 
          calculateProjectReport :: Project -> IO Report
-         calculateProjectReport (SingleProject projectId _) = ...
-         calculateProjectReport (ProjectGroup _ projects) = ...
+         calculateProjectReport (SingleProject projectId _) = _
+         calculateProjectReport (ProjectGroup _ projects) = _
 
       and by folding the result of recursively applying
       ``calculateProjectReport`` on project group children:
@@ -324,8 +323,8 @@ Implementation
 
          foldMap calculateProjectReport _childProjects
 
-Testing it all out
-~~~~~~~~~~~~~~~~~~
+Testing Your Implementation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Whew! Those are all the things needed in the project management
 system. To have some data to try report calculation on, create
@@ -345,8 +344,8 @@ levels of project groups.
                where
                  stockholm = Project (ProjectId 1) "Stockholm"
                  gothenburg = Project (ProjectId 2) "Gothenburg"
-                 malmo = ProjectGroup "malmo" [city, limhamn]
-                 city = Project (ProjectId 3) "Malmo City"
+                 malmo = ProjectGroup "Malmö" [city, limhamn]
+                 city = Project (ProjectId 3) "Malmö City"
                  limhamn = Project (ProjectId 4) "Limhamn"
 
 Now, apply the report calculation function to the demo project. Do

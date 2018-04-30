@@ -38,38 +38,25 @@ pre.numberSource a.sourceLine::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {  }
 @media screen {
 a.sourceLine::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; } /* Alert */
-code span.an { color: #008000; } /* Annotation */
-code span.at { } /* Attribute */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #0000ff; } /* ControlFlow */
-code span.ch { color: #008080; } /* Char */
-code span.cn { } /* Constant */
-code span.co { color: #008000; } /* Comment */
-code span.cv { color: #008000; } /* CommentVar */
-code span.do { color: #008000; } /* Documentation */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.im { } /* Import */
-code span.in { color: #008000; } /* Information */
-code span.kw { color: #0000ff; } /* Keyword */
-code span.op { } /* Operator */
-code span.ot { color: #ff4000; } /* Other */
-code span.pp { color: #ff4000; } /* Preprocessor */
-code span.sc { color: #008080; } /* SpecialChar */
-code span.ss { color: #008080; } /* SpecialString */
-code span.st { color: #008080; } /* String */
-code span.va { } /* Variable */
-code span.vs { color: #008080; } /* VerbatimString */
-code span.wa { color: #008000; font-weight: bold; } /* Warning */
+code span.al { font-weight: bold; } /* Alert */
+code span.an { font-style: italic; } /* Annotation */
+code span.cf { font-weight: bold; } /* ControlFlow */
+code span.co { font-style: italic; } /* Comment */
+code span.cv { font-style: italic; } /* CommentVar */
+code span.do { font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.er { font-weight: bold; } /* Error */
+code span.in { font-style: italic; } /* Information */
+code span.kw { font-weight: bold; } /* Keyword */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.wa { font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="workshop/style.css">
   <link rel="stylesheet" href="workshop/iosevka/iosevka.css">
@@ -89,10 +76,10 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <li><a href="#installing-stack">Installing Stack</a></li>
 <li><a href="#cloning-and-installing-dependencies">Cloning and Installing Dependencies</a></li>
 </ul></li>
-<li><a href="#how-to-follow-this-tutorial">How to follow this tutorial</a></li>
+<li><a href="#editing-workflow">Editing Workflow</a></li>
 <li><a href="#part-1-data-structures">Part 1: Data Structures</a><ul>
 <li><a href="#implementation">Implementation</a></li>
-<li><a href="#testing-it-all-out">Testing it all out</a></li>
+<li><a href="#testing-your-implementation">Testing Your Implementation</a></li>
 </ul></li>
 <li><a href="#digging-deeper">Digging Deeper</a></li>
 </ul>
@@ -107,14 +94,13 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 <h3 id="cloning-and-installing-dependencies">Cloning and Installing Dependencies</h3>
 <p>To get you up and running, begin by cloning this repository to your local machine:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" data-line-number="1">$ <span class="fu">git</span> clone https://github.com/owickstrom/domain-modelling-with-haskell-workshop.git</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="ex">...</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">$ <span class="bu">cd</span> domain-modelling-with-haskell-workshop</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" data-line-number="2">$ <span class="bu">cd</span> domain-modelling-with-haskell-workshop</a></code></pre></div>
 <p>Then, install all dependencies required, and build the project:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" data-line-number="1">$ <span class="ex">stack</span> build</a></code></pre></div>
 <p>The Cabal file for this project has a number of library dependencies already, so that you can have them installed beforehand, and complete the workshop without an (or with a flaky) internet connection.</p>
 <p>All right! If all went well, you are ready to get started. You may edit Haskell files in any text editor you like. If you don’t have any strong preference, both <a href="https://code.visualstudio.com/">VS Code</a> and <a href="https://atom.io/">Atom</a> are easy to get started with.</p>
 <p>Setting up Haskell tooling is way out of the scope of this workshop, and you will not need anything fancy. We will load and test the code in GHCi (a REPL) anyway.</p>
-<h2 id="how-to-follow-this-tutorial">How to follow this tutorial</h2>
+<h2 id="editing-workflow">Editing Workflow</h2>
 <p>When you are done with the setup, begin by running the following command in your terminal. It will start GHCi and load the Project module.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" data-line-number="1">$ <span class="ex">stack</span> repl</a></code></pre></div>
 <p>Open your text editor and navigate to the workshop Git repository. Write all your code in <code>src/Project.hs</code> under the module header:</p>
@@ -287,7 +273,7 @@ Collecting type info for 1 module(s) ...</code></pre>
 </dd>
 </dl>
 <blockquote>
-<p>Given a project, this function calculates a single aggregated <a href="">Report</a> for the entire project hierarchy. It needs to recursively walk the projects, query their budgets and transactions, calculate reports, and combine those reports into one.</p>
+<p>Given a project, this function calculates a single aggregated report for the entire project hierarchy. It needs to recursively walk the projects, query their budgets and transactions, calculate reports, and combine those reports into one.</p>
 <div class="note">
 <div class="admonition-title">
 <p>Note</p>
@@ -315,13 +301,13 @@ Collecting type info for 1 module(s) ...</code></pre>
 </div>
 <p>Recurse through the project hierarchy by pattern matching on the constructors,</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="ot">calculateProjectReport ::</span> <span class="dt">Project</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Report</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2">calculateProjectReport (<span class="dt">SingleProject</span> projectId _) <span class="fu">=</span> <span class="fu">...</span></a>
-<a class="sourceLine" id="cb17-3" data-line-number="3">calculateProjectReport (<span class="dt">ProjectGroup</span> _ projects) <span class="fu">=</span> <span class="fu">...</span></a></code></pre></div>
+<a class="sourceLine" id="cb17-2" data-line-number="2">calculateProjectReport (<span class="dt">SingleProject</span> projectId _) <span class="fu">=</span> _</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3">calculateProjectReport (<span class="dt">ProjectGroup</span> _ projects) <span class="fu">=</span> _</a></code></pre></div>
 <p>and by folding the result of recursively applying <code>calculateProjectReport</code> on project group children:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb18-1" data-line-number="1">foldMap calculateProjectReport _childProjects</a></code></pre></div>
 </div>
 </blockquote>
-<h3 id="testing-it-all-out">Testing it all out</h3>
+<h3 id="testing-your-implementation">Testing Your Implementation</h3>
 <p>Whew! Those are all the things needed in the project management system. To have some data to try report calculation on, create a <code>someProject</code> definition of type <code>Project</code>. You may construct this value however you like, but make sure to have at least three levels of project groups.</p>
 <div class="tip">
 <div class="admonition-title">
@@ -333,8 +319,8 @@ Collecting type info for 1 module(s) ...</code></pre>
 <a class="sourceLine" id="cb19-3" data-line-number="3">  <span class="kw">where</span></a>
 <a class="sourceLine" id="cb19-4" data-line-number="4">    stockholm <span class="fu">=</span> <span class="dt">Project</span> (<span class="dt">ProjectId</span> <span class="dv">1</span>) <span class="st">&quot;Stockholm&quot;</span></a>
 <a class="sourceLine" id="cb19-5" data-line-number="5">    gothenburg <span class="fu">=</span> <span class="dt">Project</span> (<span class="dt">ProjectId</span> <span class="dv">2</span>) <span class="st">&quot;Gothenburg&quot;</span></a>
-<a class="sourceLine" id="cb19-6" data-line-number="6">    malmo <span class="fu">=</span> <span class="dt">ProjectGroup</span> <span class="st">&quot;malmo&quot;</span> [city, limhamn]</a>
-<a class="sourceLine" id="cb19-7" data-line-number="7">    city <span class="fu">=</span> <span class="dt">Project</span> (<span class="dt">ProjectId</span> <span class="dv">3</span>) <span class="st">&quot;Malmo City&quot;</span></a>
+<a class="sourceLine" id="cb19-6" data-line-number="6">    malmo <span class="fu">=</span> <span class="dt">ProjectGroup</span> <span class="st">&quot;Malmö&quot;</span> [city, limhamn]</a>
+<a class="sourceLine" id="cb19-7" data-line-number="7">    city <span class="fu">=</span> <span class="dt">Project</span> (<span class="dt">ProjectId</span> <span class="dv">3</span>) <span class="st">&quot;Malmö City&quot;</span></a>
 <a class="sourceLine" id="cb19-8" data-line-number="8">    limhamn <span class="fu">=</span> <span class="dt">Project</span> (<span class="dt">ProjectId</span> <span class="dv">4</span>) <span class="st">&quot;Limhamn&quot;</span></a></code></pre></div>
 </div>
 <p>Now, apply the report calculation function to the demo project. Do you get a single report back?</p>
