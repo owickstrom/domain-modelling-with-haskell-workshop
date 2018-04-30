@@ -106,224 +106,224 @@ should be modelled as data types, and operations and queries as
 functions (using ``IO`` where needed.) Click the **TIP** boxes to get
 some assistance if you need.
 
-Project
-~~~~~~~
+1. Project
+   ~~~~~~~
 
-The core concept in the system is a *project*. A project can be
-either a single project or a project group. Both single projects and
-project groups have *names*, and single projects also have *project
-IDs*, which are natural numbers. A project group has a list of child
-projects.
+   The core concept in the system is a *project*. A project can be
+   either a single project or a project group. Both single projects and
+   project groups have *names*, and single projects also have *project
+   IDs*, which are natural numbers. A project group has a list of child
+   projects.
 
-.. tip::
+   .. tip::
 
-   A data structure with multiple variants can be expressed using a
-   data type with multiple *constructors:*
+      A data structure with multiple variants can be expressed using a
+      data type with multiple *constructors:*
 
-   .. code:: haskell
+      .. code:: haskell
 
-      data MyThing
-        = RegularThing Int
-        | OtherThing String
+         data MyThing
+           = RegularThing Int
+           | OtherThing String
 
-Project ID
-~~~~~~~~~~
+1. Project ID
+   ~~~~~~~~~~
 
-A project ID uniqely identifies a *single* project (non-group
-project) in the system.
+   A project ID uniqely identifies a *single* project (non-group
+   project) in the system.
 
-.. note::
+   .. note::
 
-   Create a type for project IDs to make it more explicit, either
-   using a `type` alias, or using a `newtype`.
+      Create a type for project IDs to make it more explicit, either
+      using a `type` alias, or using a `newtype`.
 
-.. tip::
+   .. tip::
 
-   By wrapping in a `newtype`, instead of using a "raw" numeric type
-   or a type alias, you make it safer to pass around in the code, as
-   it cannot be mistakenly interchanged with other integers.
+      By wrapping in a `newtype`, instead of using a "raw" numeric type
+      or a type alias, you make it safer to pass around in the code, as
+      it cannot be mistakenly interchanged with other integers.
 
-   .. code:: haskell
+      .. code:: haskell
 
-      newtype ProjectId = ProjectId { unProjectId :: Int }
-        deriving (Eq, Show)
+         newtype ProjectId = ProjectId { unProjectId :: Int }
+           deriving (Eq, Show)
 
-   The following code would then cause a type error.
+      The following code would then cause a type error.
 
-   .. code:: haskell
+      .. code:: haskell
 
-      pId :: ProjectId
-      pId = ProjectId 123
+         pId :: ProjectId
+         pId = ProjectId 123
 
-      ohNo = pId * 4
+         ohNo = pId * 4
 
-Budget
-~~~~~~
+1. Budget
+   ~~~~~~
 
-A budget describes the expected *income* and *expenditure* for a
-project, both being monetary values.
+   A budget describes the expected *income* and *expenditure* for a
+   project, both being monetary values.
 
-.. tip::
+   .. tip::
 
-   A Haskell data type with multiple fields can be expressed using
-   record syntax:
+      A Haskell data type with multiple fields can be expressed using
+      record syntax:
 
-   .. code:: haskell
+      .. code:: haskell
 
-      data Budget = Budget
-        { budgetIncome :: Money
-        , budgetExpenditure :: Money
-        } deriving (Show, Eq)
+         data Budget = Budget
+           { budgetIncome :: Money
+           , budgetExpenditure :: Money
+           } deriving (Show, Eq)
 
-Transaction
-~~~~~~~~~~~
+1. Transaction
+   ~~~~~~~~~~~
 
-A transaction is a very simplified concept describing a *sale* or a
-*purchase*. Each type of transaction has an amount (a monetary value.)
+   A transaction is a very simplified concept describing a *sale* or a
+   *purchase*. Each type of transaction has an amount (a monetary value.)
 
-Money
-~~~~~
+1. Money
+   ~~~~~
 
-A representation of monetary values.
+   A representation of monetary values.
 
-.. note:: Represent ``Money`` using the ``Decimal`` type from the
-   `Decimal`_ package.
+   .. note:: Represent ``Money`` using the ``Decimal`` type from the
+      `Decimal`_ package.
 
-.. _Decimal: https://hackage.haskell.org/package/Decimal-0.5.1/docs/Data-Decimal.html
+   .. _Decimal: https://hackage.haskell.org/package/Decimal-0.5.1/docs/Data-Decimal.html
 
-.. tip::
+   .. tip::
 
-   Create a ``newtype`` for monetary values by wrapping the
-   ``Decimal`` type:
+      Create a ``newtype`` for monetary values by wrapping the
+      ``Decimal`` type:
 
-   .. code:: haskell
+      .. code:: haskell
 
-      module Project where
+         module Project where
 
-      import Data.Decimal
+         import Data.Decimal
 
-      newtype Money = Money
-        { unMoney :: Decimal
-        } deriving (Show, Eq, Num)
+         newtype Money = Money
+           { unMoney :: Decimal
+           } deriving (Show, Eq, Num)
 
 
-Get Budget by Project ID
-~~~~~~~~~~~~~~~~~~~~~~~~
+1. Get Budget by Project ID
+   ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given a project ID, we need to be able to retrieve a budget for the
-corresponding project.
+   Given a project ID, we need to be able to retrieve a budget for the
+   corresponding project.
 
-.. note::
+   .. note::
 
-   To save time, hard-code or generate a random result,
-   instead of using a real persistent database. The function should
-   still return ``IO``, e.g:
+      To save time, hard-code or generate a random result,
+      instead of using a real persistent database. The function should
+      still return ``IO``, e.g:
 
-   .. code:: haskell
+      .. code:: haskell
 
-             getBudget :: ProjectId -> IO Budget
+                getBudget :: ProjectId -> IO Budget
 
-Get Transactions by Project ID
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1. Get Transactions by Project ID
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given a project ID, we need to be able to retrieve a list of
-transactions for the corresponding project.
+   Given a project ID, we need to be able to retrieve a list of
+   transactions for the corresponding project.
 
-.. note::
+   .. note::
 
-    To save time, hard-code or generate a random result, instead of
-    using a real persistent database or querying an external
-    system. The function should still return ``IO``, e.g:
+       To save time, hard-code or generate a random result, instead of
+       using a real persistent database or querying an external
+       system. The function should still return ``IO``, e.g:
 
-    .. code:: haskell
+       .. code:: haskell
 
-              getTransactions :: ProjectId -> IO [Transaction]
+                 getTransactions :: ProjectId -> IO [Transaction]
 
-Report
-~~~~~~
+1. Report
+   ~~~~~~
 
-A report represents the result of the *report calculation*. It has a
-*budget profit*, a *net profit*, and a *difference*, all being
-monetary values.
+   A report represents the result of the *report calculation*. It has a
+   *budget profit*, a *net profit*, and a *difference*, all being
+   monetary values.
 
-Calculate Report
-~~~~~~~~~~~~~~~~
+1. Calculate Report
+   ~~~~~~~~~~~~~~~~
 
-The reporting calculation, depending on a project budget and a list
-of project transactions. It calculates a `Report`_, where:
+   The reporting calculation, depending on a project budget and a list
+   of project transactions. It calculates a `Report`_, where:
 
-.. math::
+   .. math::
 
-   \text{budget profit} = \text{income} - \text{expenditure}
+      \text{budget profit} = \text{income} - \text{expenditure}
 
-   \text{net profit} = \text{sales} - \text{purchases}
+      \text{net profit} = \text{sales} - \text{purchases}
 
-   \text{difference} = \text{net profit} - \text{budget profit}
+      \text{difference} = \text{net profit} - \text{budget profit}
 
-.. note::
+   .. note::
 
-   The report calculation function should be a pure function, with a
-   Haskell type signature like:
+      The report calculation function should be a pure function, with a
+      Haskell type signature like:
 
-   .. code:: haskell
+      .. code:: haskell
 
-      calculateReport :: Budget -> [Transaction] -> Report
+         calculateReport :: Budget -> [Transaction] -> Report
 
-Calculate Project Report
-~~~~~~~~~~~~~~~~~~~~~~~~
+1. Calculate Project Report
+   ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Given a project, this function calculates a single aggregated `Report`_
-for the entire project hierarchy. It needs to recursively walk the
-projects, query their budgets and transactions, calculate reports, and
-combine those reports into one.
+   Given a project, this function calculates a single aggregated `Report`_
+   for the entire project hierarchy. It needs to recursively walk the
+   projects, query their budgets and transactions, calculate reports, and
+   combine those reports into one.
 
-.. note::
+   .. note::
 
-   The project report calculation function returns ``IO Report``, e.g.:
+      The project report calculation function returns ``IO Report``, e.g.:
 
-   .. code:: haskell
+      .. code:: haskell
 
-      calculateProjectReport :: Project -> IO Report
+         calculateProjectReport :: Project -> IO Report
 
-   Use the (fake) queries you wrote earlier to obtain a budget and a
-   list of transactions for each project.
+      Use the (fake) queries you wrote earlier to obtain a budget and a
+      list of transactions for each project.
 
-.. tip::
+   .. tip::
 
-   Create an instance of ``Monoid`` for ``Report`` and use it to
-   combine reports:
+      Create an instance of ``Monoid`` for ``Report`` and use it to
+      combine reports:
 
-   .. code:: haskell
+      .. code:: haskell
 
-      instance Monoid Report where
-        mempty = Report 0 0 0
-        mappend (Report b1 n1 d1) (Report b2 n2 d2) =
-          Report (b1 + b2) (n1 + n2) (d1 + d2)
+         instance Monoid Report where
+           mempty = Report 0 0 0
+           mappend (Report b1 n1 d1) (Report b2 n2 d2) =
+             Report (b1 + b2) (n1 + n2) (d1 + d2)
 
-   Now you can combine a list of reports using ``fold``:
+      Now you can combine a list of reports using ``fold``:
 
-   .. code:: haskell
+      .. code:: haskell
 
-      megaReport :: Report
-      megaReport = fold [report1, report2, report3]
+         megaReport :: Report
+         megaReport = fold [report1, report2, report3]
 
-.. tip::
+   .. tip::
 
-   Recurse through the project hierarchy by pattern matching on the
-   constructors,
+      Recurse through the project hierarchy by pattern matching on the
+      constructors,
 
-   .. code:: haskell
+      .. code:: haskell
 
-      calculateProjectReport :: Project -> IO Report
-      calculateProjectReport (SingleProject projectId _) = ...
-      calculateProjectReport (ProjectGroup _ projects) = ...
+         calculateProjectReport :: Project -> IO Report
+         calculateProjectReport (SingleProject projectId _) = ...
+         calculateProjectReport (ProjectGroup _ projects) = ...
 
-   and by folding the result of recursively applying
-   ``calculateProjectReport`` on project group children:
+      and by folding the result of recursively applying
+      ``calculateProjectReport`` on project group children:
 
-   .. code:: haskell
+      .. code:: haskell
 
-      foldMap calculateProjectReport _childProjects
+         foldMap calculateProjectReport _childProjects
 
 Testing it all out
 ~~~~~~~~~~~~~~~~~~

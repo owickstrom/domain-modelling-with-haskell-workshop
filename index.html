@@ -91,16 +91,6 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
 </ul></li>
 <li><a href="#how-to-follow-this-tutorial">How to follow this tutorial</a></li>
 <li><a href="#part-1-data-structures">Part 1: Data Structures</a><ul>
-<li><a href="#project">Project</a></li>
-<li><a href="#project-id">Project ID</a></li>
-<li><a href="#budget">Budget</a></li>
-<li><a href="#transaction">Transaction</a></li>
-<li><a href="#money">Money</a></li>
-<li><a href="#get-budget-by-project-id">Get Budget by Project ID</a></li>
-<li><a href="#get-transactions-by-project-id">Get Transactions by Project ID</a></li>
-<li><a href="#report">Report</a></li>
-<li><a href="#calculate-report">Calculate Report</a></li>
-<li><a href="#calculate-project-report">Calculate Project Report</a></li>
 <li><a href="#testing-it-all-out">Testing it all out</a></li>
 </ul></li>
 <li><a href="#digging-deeper">Digging Deeper</a></li>
@@ -137,7 +127,8 @@ Collecting type info for 1 module(s) ...</code></pre>
 <h2 id="part-1-data-structures">Part 1: Data Structures</h2>
 <p>You will begin by laying the groundwork for the project management system. The concepts and features that we need in the are listed and described informally below.</p>
 <p>Go through this list in order and implement each part. The &quot;things&quot; should be modelled as data types, and operations and queries as functions (using <code>IO</code> where needed.) Click the <strong>TIP</strong> boxes to get some assistance if you need.</p>
-<h3 id="project">Project</h3>
+<ol type="1">
+<li><h4 id="project">Project</h4>
 <p>The core concept in the system is a <em>project</em>. A project can be either a single project or a project group. Both single projects and project groups have <em>names</em>, and single projects also have <em>project IDs</em>, which are natural numbers. A project group has a list of child projects.</p>
 <div class="tip">
 <div class="admonition-title">
@@ -147,8 +138,8 @@ Collecting type info for 1 module(s) ...</code></pre>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">data</span> <span class="dt">MyThing</span></a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="fu">=</span> <span class="dt">RegularThing</span> <span class="dt">Int</span></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="fu">|</span> <span class="dt">OtherThing</span> <span class="dt">String</span></a></code></pre></div>
-</div>
-<h3 id="project-id">Project ID</h3>
+</div></li>
+<li><h4 id="project-id">Project ID</h4>
 <p>A project ID uniqely identifies a <em>single</em> project (non-group project) in the system.</p>
 <div class="note">
 <div class="admonition-title">
@@ -168,8 +159,8 @@ Collecting type info for 1 module(s) ...</code></pre>
 <a class="sourceLine" id="cb8-2" data-line-number="2">pId <span class="fu">=</span> <span class="dt">ProjectId</span> <span class="dv">123</span></a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb8-4" data-line-number="4">ohNo <span class="fu">=</span> pId <span class="fu">*</span> <span class="dv">4</span></a></code></pre></div>
-</div>
-<h3 id="budget">Budget</h3>
+</div></li>
+<li><h4 id="budget">Budget</h4>
 <p>A budget describes the expected <em>income</em> and <em>expenditure</em> for a project, both being monetary values.</p>
 <div class="tip">
 <div class="admonition-title">
@@ -180,16 +171,16 @@ Collecting type info for 1 module(s) ...</code></pre>
 <a class="sourceLine" id="cb9-2" data-line-number="2">  {<span class="ot"> budgetIncome ::</span> <span class="dt">Money</span></a>
 <a class="sourceLine" id="cb9-3" data-line-number="3">  ,<span class="ot"> budgetExpenditure ::</span> <span class="dt">Money</span></a>
 <a class="sourceLine" id="cb9-4" data-line-number="4">  } <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>)</a></code></pre></div>
-</div>
-<h3 id="transaction">Transaction</h3>
-<p>A transaction is a very simplified concept describing a <em>sale</em> or a <em>purchase</em>. Each type of transaction has an amount (a monetary value.)</p>
-<h3 id="money">Money</h3>
+</div></li>
+<li><h4 id="transaction">Transaction</h4>
+<p>A transaction is a very simplified concept describing a <em>sale</em> or a <em>purchase</em>. Each type of transaction has an amount (a monetary value.)</p></li>
+<li><h4 id="money">Money</h4>
 <p>A representation of monetary values.</p>
 <div class="note">
 <div class="admonition-title">
 <p>Note</p>
 </div>
-<p>Represent <code>Money</code> using the <code>Decimal</code> type from the <a href="https://hackage.haskell.org/package/Decimal-0.5.1/docs/Data-Decimal.html">Decimal</a> package.</p>
+<p>Represent <code>Money</code> using the <code>Decimal</code> type from the <a href="">Decimal</a> package.</p>
 </div>
 <div class="tip">
 <div class="admonition-title">
@@ -203,8 +194,8 @@ Collecting type info for 1 module(s) ...</code></pre>
 <a class="sourceLine" id="cb10-5" data-line-number="5"><span class="kw">newtype</span> <span class="dt">Money</span> <span class="fu">=</span> <span class="dt">Money</span></a>
 <a class="sourceLine" id="cb10-6" data-line-number="6">  {<span class="ot"> unMoney ::</span> <span class="dt">Decimal</span></a>
 <a class="sourceLine" id="cb10-7" data-line-number="7">  } <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>, <span class="dt">Num</span>)</a></code></pre></div>
-</div>
-<h3 id="get-budget-by-project-id">Get Budget by Project ID</h3>
+</div></li>
+<li><h4 id="get-budget-by-project-id">Get Budget by Project ID</h4>
 <p>Given a project ID, we need to be able to retrieve a budget for the corresponding project.</p>
 <div class="note">
 <div class="admonition-title">
@@ -212,8 +203,8 @@ Collecting type info for 1 module(s) ...</code></pre>
 </div>
 <p>To save time, hard-code or generate a random result, instead of using a real persistent database. The function should still return <code>IO</code>, e.g:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="ot">getBudget ::</span> <span class="dt">ProjectId</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Budget</span></a></code></pre></div>
-</div>
-<h3 id="get-transactions-by-project-id">Get Transactions by Project ID</h3>
+</div></li>
+<li><h4 id="get-transactions-by-project-id">Get Transactions by Project ID</h4>
 <p>Given a project ID, we need to be able to retrieve a list of transactions for the corresponding project.</p>
 <div class="note">
 <div class="admonition-title">
@@ -221,11 +212,11 @@ Collecting type info for 1 module(s) ...</code></pre>
 </div>
 <p>To save time, hard-code or generate a random result, instead of using a real persistent database or querying an external system. The function should still return <code>IO</code>, e.g:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="ot">getTransactions ::</span> <span class="dt">ProjectId</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> [<span class="dt">Transaction</span>]</a></code></pre></div>
-</div>
-<h3 id="report">Report</h3>
-<p>A report represents the result of the <em>report calculation</em>. It has a <em>budget profit</em>, a <em>net profit</em>, and a <em>difference</em>, all being monetary values.</p>
-<h3 id="calculate-report">Calculate Report</h3>
-<p>The reporting calculation, depending on a project budget and a list of project transactions. It calculates a <a href="#report">Report</a>, where:</p>
+</div></li>
+<li><h4 id="report">Report</h4>
+<p>A report represents the result of the <em>report calculation</em>. It has a <em>budget profit</em>, a <em>net profit</em>, and a <em>difference</em>, all being monetary values.</p></li>
+<li><h4 id="calculate-report">Calculate Report</h4>
+<p>The reporting calculation, depending on a project budget and a list of project transactions. It calculates a <a href="">Report</a>, where:</p>
 <p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">budget profit</mtext><mo>=</mo><mtext mathvariant="normal">income</mtext><mo>−</mo><mtext mathvariant="normal">expenditure</mtext></mrow><annotation encoding="application/x-tex">\text{budget profit} = \text{income} - \text{expenditure}</annotation></semantics></math><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">net profit</mtext><mo>=</mo><mtext mathvariant="normal">sales</mtext><mo>−</mo><mtext mathvariant="normal">purchases</mtext></mrow><annotation encoding="application/x-tex">\text{net profit} = \text{sales} - \text{purchases}</annotation></semantics></math><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">difference</mtext><mo>=</mo><mtext mathvariant="normal">net profit</mtext><mo>−</mo><mtext mathvariant="normal">budget profit</mtext></mrow><annotation encoding="application/x-tex">\text{difference} = \text{net profit} - \text{budget profit}</annotation></semantics></math></p>
 <div class="note">
 <div class="admonition-title">
@@ -233,9 +224,9 @@ Collecting type info for 1 module(s) ...</code></pre>
 </div>
 <p>The report calculation function should be a pure function, with a Haskell type signature like:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="ot">calculateReport ::</span> <span class="dt">Budget</span> <span class="ot">-&gt;</span> [<span class="dt">Transaction</span>] <span class="ot">-&gt;</span> <span class="dt">Report</span></a></code></pre></div>
-</div>
-<h3 id="calculate-project-report">Calculate Project Report</h3>
-<p>Given a project, this function calculates a single aggregated <a href="#report">Report</a> for the entire project hierarchy. It needs to recursively walk the projects, query their budgets and transactions, calculate reports, and combine those reports into one.</p>
+</div></li>
+<li><h4 id="calculate-project-report">Calculate Project Report</h4>
+<p>Given a project, this function calculates a single aggregated <a href="">Report</a> for the entire project hierarchy. It needs to recursively walk the projects, query their budgets and transactions, calculate reports, and combine those reports into one.</p>
 <div class="note">
 <div class="admonition-title">
 <p>Note</p>
@@ -267,7 +258,8 @@ Collecting type info for 1 module(s) ...</code></pre>
 <a class="sourceLine" id="cb17-3" data-line-number="3">calculateProjectReport (<span class="dt">ProjectGroup</span> _ projects) <span class="fu">=</span> <span class="fu">...</span></a></code></pre></div>
 <p>and by folding the result of recursively applying <code>calculateProjectReport</code> on project group children:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb18-1" data-line-number="1">foldMap calculateProjectReport _childProjects</a></code></pre></div>
-</div>
+</div></li>
+</ol>
 <h3 id="testing-it-all-out">Testing it all out</h3>
 <p>Whew! Those are all the things needed in the project management system. To have some data to try report calculation on, create a <code>someProject</code> definition of type <code>Project</code>. You may construct this value however you like, but make sure to have at least three levels of project groups.</p>
 <div class="tip">
