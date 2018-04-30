@@ -98,16 +98,24 @@ Part 1: Data Structures
 -----------------------
 
 You will begin by laying the groundwork for the project management
-system. The concepts and features that we need in the are listed and
-described informally below.
+system. The system will work with hierarchies of *projects*,
+*budgets*, *transactions*, and provide calculatation of *reports*,
+showing a project's budgeted and actual profit. To keep the scope of
+the workshop down, the system will be implemented with fake database
+queries and will not have any graphical user interface.
 
-Go through this list in order and implement each part. The "things"
-should be modelled as data types, and operations and queries as
-functions (using ``IO`` where needed.) Click the **TIP** boxes to get
-some assistance if you need.
+Details and instructions about what you will build are listed
+below. Go through this list in order and implement each part. The
+"things" should be modelled as data types, and operations and queries
+as functions (using ``IO`` where needed.) Click the **TIP** boxes to
+get some assistance if you need.
 
-1. Project
-   ~~~~~~~
+Okay, let's begin!
+
+Implementation
+~~~~~~~~~~~~~~
+
+:Project:
 
    The core concept in the system is a *project*. A project can be
    either a single project or a project group. Both single projects and
@@ -126,8 +134,7 @@ some assistance if you need.
            = RegularThing Int
            | OtherThing String
 
-1. Project ID
-   ~~~~~~~~~~
+:Project ID:
 
    A project ID uniqely identifies a *single* project (non-group
    project) in the system.
@@ -157,8 +164,7 @@ some assistance if you need.
 
          ohNo = pId * 4
 
-1. Budget
-   ~~~~~~
+:Budget:
 
    A budget describes the expected *income* and *expenditure* for a
    project, both being monetary values.
@@ -175,14 +181,12 @@ some assistance if you need.
            , budgetExpenditure :: Money
            } deriving (Show, Eq)
 
-1. Transaction
-   ~~~~~~~~~~~
+:Transaction:
 
    A transaction is a very simplified concept describing a *sale* or a
    *purchase*. Each type of transaction has an amount (a monetary value.)
 
-1. Money
-   ~~~~~
+:Money:
 
    A representation of monetary values.
 
@@ -207,8 +211,7 @@ some assistance if you need.
            } deriving (Show, Eq, Num)
 
 
-1. Get Budget by Project ID
-   ~~~~~~~~~~~~~~~~~~~~~~~~
+:Get Budget by Project ID:
 
    Given a project ID, we need to be able to retrieve a budget for the
    corresponding project.
@@ -223,8 +226,7 @@ some assistance if you need.
 
                 getBudget :: ProjectId -> IO Budget
 
-1. Get Transactions by Project ID
-   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:Get Transactions by Project ID:
 
    Given a project ID, we need to be able to retrieve a list of
    transactions for the corresponding project.
@@ -239,18 +241,16 @@ some assistance if you need.
 
                  getTransactions :: ProjectId -> IO [Transaction]
 
-1. Report
-   ~~~~~~
+:Report:
 
    A report represents the result of the *report calculation*. It has a
    *budget profit*, a *net profit*, and a *difference*, all being
    monetary values.
 
-1. Calculate Report
-   ~~~~~~~~~~~~~~~~
+:Calculate Report:
 
    The reporting calculation, depending on a project budget and a list
-   of project transactions. It calculates a `Report`_, where:
+   of project transactions. It calculates a report, where:
 
    .. math::
 
@@ -269,8 +269,7 @@ some assistance if you need.
 
          calculateReport :: Budget -> [Transaction] -> Report
 
-1. Calculate Project Report
-   ~~~~~~~~~~~~~~~~~~~~~~~~
+:Calculate Project Report:
 
    Given a project, this function calculates a single aggregated `Report`_
    for the entire project hierarchy. It needs to recursively walk the
