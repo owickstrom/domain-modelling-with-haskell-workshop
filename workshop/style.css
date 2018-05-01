@@ -57,6 +57,7 @@ pre {
 code {
   padding: 0 2px;
   line-height: 1.3;
+  background: rgba(0, 0, 0, .1);
 }
 pre code {
   overflow: auto;
@@ -184,13 +185,23 @@ footer li:first-child:before {
   content: '';
 }
 
-div.sourceCode {
+pre.sourceCode {
   margin: 1em;
+  padding: 0;
 }
+div.sourceCode {
+  margin: 0;
+  padding: 0;
+}
+
 
 code span.dt {
   text-decoration: none;
   font-style: italic;
+}
+code span.co {
+  font-style: italic;
+  color: #666;
 }
 
 .admonition-title {
@@ -227,6 +238,7 @@ code span.dt {
 .tip p, .note p {
   margin: .25em 0;
 }
+
 .tip > * {
   display: none;
 }

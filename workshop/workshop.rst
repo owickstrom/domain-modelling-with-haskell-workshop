@@ -15,52 +15,75 @@ We will model a simple project management system, and implement
 *reporting* functionality based on our core data structures. The
 sections in this workshop explore increasingly abstract techniques for
 working with Haskell data structures. We begin with regular Haskell data
-structures, monoids, and explicit recursion.
+structures, monoids, and recursion.
+
+Attendees should be comfortable with Haskell basics, preferably at the
+level of Haskell programming from first principles or similar. The
+workshop goal of this workshop is to provide a step from theoretical
+exercises into what tasks that are closer to "bread and butter"
+programming in industry.
 
 Setup
 -----
 
-Installing Stack
-~~~~~~~~~~~~~~~~
+Installing the GHC compiler
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you don’t have any strong preferences on your Haskell installation,
-and just want to get going, it is recommended to use
-`Stack <https://haskellstack.org>`__ to install the Haskell compiler,
-the required libraries, and compiling the code. The website has the
-installation instructions on the home page.
+and just want to get going, you can use `Stack
+<https://haskellstack.org>`__ to install the Haskell compiler, the
+required libraries, and compiling the code. The website has the
+`installation instructions
+<https://docs.haskellstack.org/en/stable/README/#how-to-install>`_ on
+the home page.
 
-If you do install GHC and Cabal in another way, do consider using Cabal
-``new-build``, a sandbox, or some other means of isolating the build.
+You can also use GHC and Cabal provided by `Haskell Platform
+<https://www.haskell.org/platform/>`_, which has packages for many
+operating systems and distributions.
 
 Cloning and Installing Dependencies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To get you up and running, begin by cloning this repository to your
-local machine:
+local machine using `Git <https://git-scm.com/>`_:
 
 .. code:: sh
 
     $ git clone https://github.com/owickstrom/domain-modelling-with-haskell-workshop.git
     $ cd domain-modelling-with-haskell-workshop
 
-Then, install all dependencies required, and build the project:
+Then, install all dependencies and build the project by running the
+`stack build` command. It first installs the dependencies if missing,
+then builds the project.
 
 .. code:: sh
 
     $ stack build
 
-The Cabal file for this project has a number of library dependencies
-already, so that you can have them installed beforehand, and complete
-the workshop without an (or with a flaky) internet connection.
+If you are not using Stack, e.g. the Haskell Platform, run:
+
+.. code:: sh
+
+   $ cabal update
+   $ cabal install --only-dependencies
+   $ cabal configure
+   $ cabal build
+
+The Cabal file for this project, located at ``domain-modelling.cabal``
+in the root directory, has a number of library dependencies
+already. That way, you will have them installed when you start, and
+complete the workshop without an internet connection.
 
 All right! If all went well, you are ready to get started. You may edit
 Haskell files in any text editor you like. If you don’t have any strong
 preference, both `VS Code <https://code.visualstudio.com/>`__ and
 `Atom <https://atom.io/>`__ are easy to get started with.
 
-Setting up Haskell tooling is way out of the scope of this workshop, and
-you will not need anything fancy. We will load and test the code in GHCi
-(a REPL) anyway.
+Setting up Haskell tooling is way out of the scope of this workshop,
+and you will not need anything fancy. We will load and test the code
+in GHCi (the interactive GHC environment) anyway. If you are used to
+other functional programming languages, GHCi is equivalent of a `REPL
+<https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop>`_.
 
 Editing Workflow
 ----------------
@@ -83,8 +106,9 @@ header:
 
    -- Your stuff here!
 
-When you want to check some code you have written, write ``:reload``
-and hit Enter. If there are any type errors, GHCi will print them.
+When you want to check some code you have written, type ``:reload`` in
+GHCi and hit Enter. If there are any type errors, GHCi will print
+them.
 
 .. code:: ghci
 
@@ -105,9 +129,9 @@ queries and will not have any graphical user interface.
 
 Details and instructions about what you will build are listed
 below. Go through this list in order and implement each part. The
-"things" should be modelled as data types, and operations and queries
-as functions (using ``IO`` where needed.) Click the **TIP** boxes to
-get some assistance if you need.
+nouns (or "things") should be modelled as data types, and operations and
+queries as functions (using ``IO`` where needed.) Click the **TIP**
+boxes to get some assistance if you need.
 
 Okay, let's begin!
 
@@ -117,10 +141,10 @@ Implementation
 :Project:
 
    The core concept in the system is a *project*. A project can be
-   either a single project or a project group. Both single projects and
-   project groups have *names*, and single projects also have *project
-   IDs*, which are natural numbers. A project group has a list of child
-   projects.
+   either a single project or a project group. Both single projects
+   and project groups have *names*, and single projects also have
+   *project IDs* (described below). A project group has a list of
+   child projects.
 
    .. tip::
 
@@ -136,7 +160,8 @@ Implementation
 :Project ID:
 
    A project ID uniqely identifies a *single* project (non-group
-   project) in the system.
+   project) in the system. It is a `natural
+   number <https://en.wikipedia.org/wiki/Natural_number>`_.
 
    .. note::
 
@@ -145,16 +170,43 @@ Implementation
 
    .. tip::
 
+      A natural number can be represented using the `Word
+      <http://hackage.haskell.org/package/base-4.11.1.0/docs/Data-Word.html>`_
+      type, which is the equivalent of `unsigned int
+      <https://en.wikipedia.org/wiki/C_data_types>`_ from C. Import
+      the ``Data.Word`` module to use ``Word``:
+
+      .. code:: haskell
+
+         module Project where
+
+         import Data.Word
+
+         myNaturalNumber :: Word
+         myNaturalNumber = 1
+
+   .. tip::
+
       By wrapping in a `newtype`, instead of using a "raw" numeric type
       or a type alias, you make it safer to pass around in the code, as
-      it cannot be mistakenly interchanged with other integers.
+      it cannot be mistakenly swapped with other integers.
 
       .. code:: haskell
 
          newtype ProjectId = ProjectId { unProjectId :: Int }
            deriving (Eq, Show)
 
-      The following code would then cause a type error.
+      Note that we use `deriving`, a way of having the compiler
+      automatically create instances for the listed type classes. In
+      this case we get
+
+      * an ``Eq`` instance, which lets us check if ``ProjectId``
+        values are equal, and
+      * a ``Show`` instance, which gives us a ``String``
+        representation of a ``ProjectId`` value.
+
+      When we use a newtype, the following code would cause a type
+      error.
 
       .. code:: haskell
 
@@ -190,7 +242,8 @@ Implementation
    A representation of monetary values.
 
    .. note:: Represent ``Money`` using the ``Decimal`` type from the
-      `Decimal`_ package.
+      `Decimal`_ package. You do not need to care about currency, only
+      the amount.
 
    .. _Decimal: https://hackage.haskell.org/package/Decimal-0.5.1/docs/Data-Decimal.html
 
@@ -217,13 +270,17 @@ Implementation
 
    .. note::
 
-      To save time, hard-code or generate a random result,
-      instead of using a real persistent database. The function should
-      still return ``IO``, e.g:
+      To keep the scope of this workshop limited we will not use a
+      real database. Instead, hard-code or generate a random result,
+      making it a "fake" query. The function should still return
+      ``IO``, e.g:
 
       .. code:: haskell
 
                 getBudget :: ProjectId -> IO Budget
+
+      If you want to use a real database, consider that a follow-up
+      exercise.
 
 :Get Transactions by Project ID:
 
@@ -232,9 +289,10 @@ Implementation
 
    .. note::
 
-       To save time, hard-code or generate a random result, instead of
-       using a real persistent database or querying an external
-       system. The function should still return ``IO``, e.g:
+      Again, to keep the scope of this workshop limited we will not
+      use a real database. Instead, hard-code or generate a random
+      result, making it a "fake" query. The function should still
+      return ``IO``, e.g:
 
        .. code:: haskell
 
@@ -248,8 +306,8 @@ Implementation
 
 :Calculate Report:
 
-   The reporting calculation, depending on a project budget and a list
-   of project transactions. It calculates a report, where:
+   Create a report from a budget and a list of transactions. It
+   calculates a report, where:
 
    .. math::
 
@@ -327,10 +385,10 @@ Testing Your Implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Whew! Those are all the things needed in the project management
-system. To have some data to try report calculation on, create
-a ``someProject`` definition of type ``Project``. You may construct
-this value however you like, but make sure to have at least three
-levels of project groups.
+system. To try report calculation, define ``someProject :: Project``
+at the top-level in ``Project.hs``. You may construct this value
+however you like, but make sure to have at least two levels of project
+groups.
 
 .. tip::
 
@@ -353,8 +411,8 @@ you get a single report back?
 
 .. tip::
 
-   To calculate a report in the GHCi REPL, run something like the
-   following, and you should see the report data structure printed.
+   To calculate a report in GHCi, run something like the following,
+   and you should see the report data structure printed.
 
    .. code:: ghci
 

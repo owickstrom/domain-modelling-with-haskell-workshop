@@ -8,7 +8,7 @@ index.html: workshop/workshop.rst Makefile workshop/workshop.js.html
 		--css 'https://fonts.googleapis.com/css?family=Source+Sans+Pro' \
 		--highlight-style monochrome \
 		--toc \
-		--mathml \
+		--mathjax \
 		--base-header-level=2 \
 		-o index.html \
 		workshop/workshop.rst
