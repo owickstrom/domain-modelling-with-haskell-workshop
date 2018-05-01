@@ -83,9 +83,10 @@ code span.wa { font-style: italic; } /* Warning */
 <li><a href="#testing-your-implementation">Testing Your Implementation</a></li>
 </ul></li>
 <li><a href="#digging-deeper">Digging Deeper</a></li>
+<li><a href="#credits">Credits</a></li>
 </ul>
 </nav>
-<p>Welcome to the “Domain Modelling with Haskell” workshop, based off the screencast series from <a href="https://haskell-at-work.com">Haskell at Work</a>. This document contains the instructions, exercises, and references for you to get started with Haskell and domain modelling, in the example domain of <em>project management</em>.</p>
+<p>Welcome to the “Domain Modelling with Haskell” workshop! This material is based on the screencast series from <a href="https://haskell-at-work.com">Haskell at Work</a>. It contains the instructions, exercises, and references for you to get started with Haskell and domain modelling, in the example domain of <em>project management</em>.</p>
 <h2 id="introduction">Introduction</h2>
 <p>We will model a simple project management system, and implement <em>reporting</em> functionality based on our core data structures. The sections in this workshop explore increasingly abstract techniques for working with Haskell data structures. We begin with regular Haskell data structures, monoids, and recursion.</p>
 <p>Attendees should be comfortable with Haskell basics, preferably at the level of Haskell programming from first principles or similar. The workshop goal of this workshop is to provide a step from theoretical exercises into what tasks that are closer to &quot;bread and butter&quot; programming in industry.</p>
@@ -170,7 +171,7 @@ Collecting type info for 1 module(s) ...</code></pre>
 <p>Tip</p>
 </div>
 <p>By wrapping in a newtype, instead of using a &quot;raw&quot; numeric type or a type alias, you make it safer to pass around in the code, as it cannot be mistakenly swapped with other integers.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">newtype</span> <span class="dt">ProjectId</span> <span class="fu">=</span> <span class="dt">ProjectId</span> {<span class="ot"> unProjectId ::</span> <span class="dt">Int</span> }</a>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">newtype</span> <span class="dt">ProjectId</span> <span class="fu">=</span> <span class="dt">ProjectId</span> <span class="dt">Int</span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">  <span class="kw">deriving</span> (<span class="dt">Eq</span>, <span class="dt">Show</span>)</a></code></pre></div>
 <p>Note that we use deriving, a way of having the compiler automatically create instances for the listed type classes. In this case we get</p>
 <ul>
@@ -221,7 +222,7 @@ Collecting type info for 1 module(s) ...</code></pre>
 <div class="admonition-title">
 <p>Note</p>
 </div>
-<p>Represent <code>Money</code> using the <code>Decimal</code> type from the <a href="">Decimal</a> package. You do not need to care about currency, only the amount.</p>
+<p>Represent <code>Money</code> using the <code>Decimal</code> type from the <a href="https://hackage.haskell.org/package/Decimal-0.5.1/docs/Data-Decimal.html">Decimal</a> package. You do not need to care about currency, only the amount.</p>
 </div>
 <div class="tip">
 <div class="admonition-title">
@@ -232,9 +233,8 @@ Collecting type info for 1 module(s) ...</code></pre>
 <a class="sourceLine" id="cb12-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Data.Decimal</span></a>
 <a class="sourceLine" id="cb12-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="kw">newtype</span> <span class="dt">Money</span> <span class="fu">=</span> <span class="dt">Money</span></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">  {<span class="ot"> unMoney ::</span> <span class="dt">Decimal</span></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">  } <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>, <span class="dt">Num</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="kw">newtype</span> <span class="dt">Money</span> <span class="fu">=</span> <span class="dt">Money</span> <span class="dt">Decimal</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">  <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>, <span class="dt">Num</span>)</a></code></pre></div>
 </div>
 </blockquote>
 <dl>
@@ -290,7 +290,7 @@ Collecting type info for 1 module(s) ...</code></pre>
 <div class="admonition-title">
 <p>Note</p>
 </div>
-<p>The report calculation function should be a pure function, with a Haskell type signature like:</p>
+<p>The report calculation function should be a pure function, i.e. not using <code>IO</code>. Give it a type signature like:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="ot">calculateReport ::</span> <span class="dt">Budget</span> <span class="ot">-&gt;</span> [<span class="dt">Transaction</span>] <span class="ot">-&gt;</span> <span class="dt">Report</span></a></code></pre></div>
 </div>
 </blockquote>
@@ -372,6 +372,8 @@ Money {unMoney = 7584.020748778671}}</code></pre>
 <li><a href="https://haskell-at-work.com/episodes/2018-02-11-domain-modelling-with-haskell-factoring-out-recursion.html">Factoring Out Recursion</a></li>
 </ol>
 <p><strong>Parts 2-4 have not been added to this workshop yet.</strong> If you want to explore further, I can recommend checking out those videos and the show notes. Also, the full source code for the videos is available at <a href="https://github.com/haskell-at-work/domain-modelling-with-haskell" class="uri">https://github.com/haskell-at-work/domain-modelling-with-haskell</a>.</p>
+<h2 id="credits">Credits</h2>
+<p>A huge thanks to <a href="https://twitter.com/vhgvsgr">@vhgvsgr</a>, <a href="https://twitter.com/evanborden">@evanborden</a>, <a href="https://twitter.com/trupill">@trupill</a>, <a href="https://twitter.com/paulcadman">@paulcadman</a>, and <a href="https://twitter.com/themattchan">@themattchan</a> for proof-reading and giving feedback on this material!</p>
 <script>
 document.querySelectorAll('.tip').forEach(function (tip) {
   tip.addEventListener('click', function () {

@@ -1,12 +1,11 @@
 Workshop: Domain Modelling with Haskell
 =======================================
 
-Welcome to the “Domain Modelling with Haskell” workshop, based off the
-screencast series from `Haskell at
-Work <https://haskell-at-work.com>`__. This document contains the
-instructions, exercises, and references for you to get started with
-Haskell and domain modelling, in the example domain of *project
-management*.
+Welcome to the “Domain Modelling with Haskell” workshop! This material
+is based on the screencast series from `Haskell at Work
+<https://haskell-at-work.com>`__. It contains the instructions,
+exercises, and references for you to get started with Haskell and
+domain modelling, in the example domain of *project management*.
 
 Introduction
 ------------
@@ -193,7 +192,7 @@ Implementation
 
       .. code:: haskell
 
-         newtype ProjectId = ProjectId { unProjectId :: Int }
+         newtype ProjectId = ProjectId Int
            deriving (Eq, Show)
 
       Note that we use `deriving`, a way of having the compiler
@@ -242,10 +241,10 @@ Implementation
    A representation of monetary values.
 
    .. note:: Represent ``Money`` using the ``Decimal`` type from the
-      `Decimal`_ package. You do not need to care about currency, only
-      the amount.
-
-   .. _Decimal: https://hackage.haskell.org/package/Decimal-0.5.1/docs/Data-Decimal.html
+      `Decimal
+      <https://hackage.haskell.org/package/Decimal-0.5.1/docs/Data-Decimal.html>`_
+      package. You do not need to care about currency, only the
+      amount.
 
    .. tip::
 
@@ -258,9 +257,8 @@ Implementation
 
          import Data.Decimal
 
-         newtype Money = Money
-           { unMoney :: Decimal
-           } deriving (Show, Eq, Num)
+         newtype Money = Money Decimal
+           deriving (Show, Eq, Num)
 
 
 :Get Budget by Project ID:
@@ -319,8 +317,8 @@ Implementation
 
    .. note::
 
-      The report calculation function should be a pure function, with a
-      Haskell type signature like:
+      The report calculation function should be a pure function,
+      i.e. not using ``IO``. Give it a type signature like:
 
       .. code:: haskell
 
@@ -440,3 +438,14 @@ explore further, I can recommend checking out those videos and the
 show notes. Also, the full source code for the videos is available
 at
 https://github.com/haskell-at-work/domain-modelling-with-haskell.
+
+Credits
+-------
+
+A huge thanks to
+`@vhgvsgr <https://twitter.com/vhgvsgr>`_,
+`@evanborden <https://twitter.com/evanborden>`_,
+`@trupill <https://twitter.com/trupill>`_,
+`@paulcadman <https://twitter.com/paulcadman>`_,
+and `@themattchan <https://twitter.com/themattchan>`_
+for proof-reading and giving feedback on this material!
