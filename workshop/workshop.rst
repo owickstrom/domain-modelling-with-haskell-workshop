@@ -443,7 +443,7 @@ Credits
 -------
 
 A huge thanks to
-`@vhgvsgr <https://twitter.com/vhgvsgr>`_,
+`@vbhvsgr <https://twitter.com/vbhvsgr>`_,
 `@evanborden <https://twitter.com/evanborden>`_,
 `@trupill <https://twitter.com/trupill>`_,
 `@paulcadman <https://twitter.com/paulcadman>`_,
