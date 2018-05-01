@@ -266,9 +266,8 @@ Implementation
    .. note::
 
       To keep the scope of this workshop limited we will not use a
-      real database. Instead, hard-code or generate a random result,
-      making it a "fake" query. The function should still return
-      ``IO``, e.g:
+      real database. Instead, hard-code a result, making it a "fake"
+      query. The function should still return ``IO``, e.g:
 
       .. code:: haskell
 
@@ -285,9 +284,8 @@ Implementation
    .. note::
 
       Again, to keep the scope of this workshop limited we will not
-      use a real database. Instead, hard-code or generate a random
-      result, making it a "fake" query. The function should still
-      return ``IO``, e.g:
+      use a real database. Instead, hard-code a result, making it a
+      "fake" query. The function should still return ``IO``, e.g:
 
        .. code:: haskell
 
@@ -320,6 +318,55 @@ Implementation
       .. code:: haskell
 
          calculateReport :: Budget -> [Transaction] -> Report
+
+   .. tip::
+
+      Derive an instance of the ``Num`` class for ``Money`` so that
+      you can use regular arithmetic operators in your calculation.
+      To do this you also need enable the
+      ``GeneralizedNewtypeDeriving`` extension.
+
+      .. code:: haskell
+
+         {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+         module Project where
+
+         -- other code ...
+
+         newtype Money = Money Decimal
+           deriving (Show, Eq, Num)
+
+      Now you can add money values together:
+
+      .. code:: haskell
+
+         pocketMoney = Money 123
+         savings = Money 4567
+
+         allMyCash = pocketMoney + savings
+
+   .. tip::
+
+      Consider folding over the list of transactions using a function
+      from `Data.Foldable
+      <http://hackage.haskell.org/package/base-4.11.1.0/docs/Data-Foldable.html>`_.
+      You can use `foldl'`, or ``foldMap`` if you can find a ``Monoid``
+      that sums money values.
+
+   .. tip::
+
+      There is a ``Monoid`` instance for ``Sum``, that sums the
+      wrapped values using the ``+`` operator. You can use ``getSum``
+      and ``foldMap`` to map the list of transactions into a list of
+      positive or negative ``Money`` values, and sum them using
+      ``Sum``.
+
+      .. code:: haskell
+
+        netProfit' = getSum (foldMap asProfit transactions)
+        asProfit (Sale m)     = pure m
+        asProfit (Purchase m) = pure (negate m)
+
 
 :Calculate Project Report:
 
@@ -392,17 +439,30 @@ groups.
 
    .. code:: haskell
 
-             someProject :: Project
-             someProject = ProjectGroup "Sweden" [stockholm, gothenburg, malmo]
-               where
-                 stockholm = Project (ProjectId 1) "Stockholm"
-                 gothenburg = Project (ProjectId 2) "Gothenburg"
-                 malmo = ProjectGroup "Malmö" [city, limhamn]
-                 city = Project (ProjectId 3) "Malmö City"
-                 limhamn = Project (ProjectId 4) "Limhamn"
+      someProject :: Project
+      someProject = ProjectGroup "Sweden" [stockholm, gothenburg, malmo]
+        where
+          stockholm = SingleProject (ProjectId 1) "Stockholm"
+          gothenburg = SingleProject (ProjectId 2) "Gothenburg"
+          malmo = ProjectGroup "Malmö" [city, limhamn]
+          city = SingleProject (ProjectId 3) "Malmö City"
+          limhamn = SingleProject (ProjectId 4) "Limhamn"
 
-Now, apply the report calculation function to the demo project. Do
-you get a single report back?
+To construct ``Text`` values with regular string literals, enable the
+``OverloadedStrings`` extension:
+
+.. code:: haskell
+
+   {-# LANGUAGE OverloadedStrings          #-}
+   module Project where
+
+   -- your previous code...
+
+   someProject = ProjectGroup "My Group" []
+
+Now, go back to GHCi, reload, and apply the report calculation
+function to the ``someProject`` value. Do you get a single report
+back?
 
 .. tip::
 
@@ -419,6 +479,19 @@ you get a single report back?
 
 Congratulations! You have completed the first part of "Domain
 Modelling with Haskell."
+
+Bonus Exerices
+~~~~~~~~~~~~~~
+
+* Render the report by creating a `Tree
+  <https://hackage.haskell.org/package/containers-0.5.11.0/docs/Data-Tree.html>`_
+  from a report, and rendering that using ``drawTree``.
+* Convert the hard-coded queries to generate random values using
+  `System.Random
+  <http://hackage.haskell.org/package/random-1.1/docs/System-Random.html>`_.
+* Convert the hard-coded or random-generated query results to use a
+  real database, e.g. PostgreSQL or MySQL. Haskell has many options
+  for working with relational databases.
 
 Digging Deeper
 --------------
