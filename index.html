@@ -158,13 +158,11 @@ Collecting type info for 1 module(s) ...</code></pre>
 <div class="admonition-title">
 <p>Tip</p>
 </div>
-<p>A natural number can be represented using the <a href="http://hackage.haskell.org/package/base-4.11.1.0/docs/Data-Word.html">Word</a> type, which is the equivalent of <a href="https://en.wikipedia.org/wiki/C_data_types">unsigned int</a> from C. Import the <code>Data.Word</code> module to use <code>Word</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">module</span> <span class="dt">Project</span> <span class="kw">where</span></a>
+<p>A natural number can be represented using the <a href="http://hackage.haskell.org/package/base-4.11.1.0/docs/Data-Word.html">Word</a> type, which is the equivalent of <a href="https://en.wikipedia.org/wiki/C_data_types">unsigned int</a> from C.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">type</span> <span class="dt">ProjectId</span> <span class="fu">=</span> <span class="dt">Word</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Data.Word</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="ot">myNaturalNumber ::</span> <span class="dt">Word</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">myNaturalNumber <span class="fu">=</span> <span class="dv">1</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="ot">myProjectId ::</span> <span class="dt">ProjectId</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">myProjectId <span class="fu">=</span> <span class="dv">1</span></a></code></pre></div>
 </div>
 <div class="tip">
 <div class="admonition-title">

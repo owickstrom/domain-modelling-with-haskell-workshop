@@ -172,17 +172,14 @@ Implementation
       A natural number can be represented using the `Word
       <http://hackage.haskell.org/package/base-4.11.1.0/docs/Data-Word.html>`_
       type, which is the equivalent of `unsigned int
-      <https://en.wikipedia.org/wiki/C_data_types>`_ from C. Import
-      the ``Data.Word`` module to use ``Word``:
+      <https://en.wikipedia.org/wiki/C_data_types>`_ from C.
 
       .. code:: haskell
 
-         module Project where
+         type ProjectId = Word
 
-         import Data.Word
-
-         myNaturalNumber :: Word
-         myNaturalNumber = 1
+         myProjectId :: ProjectId
+         myProjectId = 1
 
    .. tip::
 
