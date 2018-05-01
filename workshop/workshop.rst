@@ -121,7 +121,7 @@ Part 1: Data Structures
 
 You will begin by laying the groundwork for the project management
 system. The system will work with hierarchies of *projects*,
-*budgets*, *transactions*, and provide calculatation of *reports*,
+*budgets*, *transactions*, and provide calculation of *reports*,
 showing a project's budgeted and actual profit. To keep the scope of
 the workshop down, the system will be implemented with fake database
 queries and will not have any graphical user interface.
