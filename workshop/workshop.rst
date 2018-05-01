@@ -255,7 +255,7 @@ Implementation
          import Data.Decimal
 
          newtype Money = Money Decimal
-           deriving (Show, Eq, Num)
+           deriving (Show, Eq)
 
 
 :Get Budget by Project ID:
@@ -471,11 +471,9 @@ back?
 
    .. code:: ghci
 
-             > :reload
-             > calculateProjectReport someProject
-             Report {budgetProfit = Money {unMoney = -5392.74046336179},
-             netProfit = Money {unMoney = 2191.2802854168813}, difference =
-             Money {unMoney = 7584.020748778671}}
+      > :reload
+      λ> calculateProjectReport someProject
+      Report {budgetProfit = Money 800, netProfit = Money -568, difference = Money -1368}
 
 Congratulations! You have completed the first part of "Domain
 Modelling with Haskell."
@@ -517,5 +515,6 @@ A huge thanks to
 `@evanborden <https://twitter.com/evanborden>`_,
 `@trupill <https://twitter.com/trupill>`_,
 `@paulcadman <https://twitter.com/paulcadman>`_,
-and `@themattchan <https://twitter.com/themattchan>`_
+`@themattchan <https://twitter.com/themattchan>`_,
+and `@mathapptician <https://twitter.com/mathapptician>`_
 for proof-reading and giving feedback on this material!

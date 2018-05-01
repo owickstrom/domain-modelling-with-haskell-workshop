@@ -233,7 +233,7 @@ Collecting type info for 1 module(s) ...</code></pre>
 <a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw">import</span> <span class="dt">Data.Decimal</span></a>
 <a class="sourceLine" id="cb12-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb12-5" data-line-number="5"><span class="kw">newtype</span> <span class="dt">Money</span> <span class="fu">=</span> <span class="dt">Money</span> <span class="dt">Decimal</span></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">  <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>, <span class="dt">Num</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb12-6" data-line-number="6">  <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>)</a></code></pre></div>
 </div>
 </blockquote>
 <dl>
@@ -396,10 +396,8 @@ Collecting type info for 1 module(s) ...</code></pre>
 </div>
 <p>To calculate a report in GHCi, run something like the following, and you should see the report data structure printed.</p>
 <pre class="sourceCode ghci"><code>&gt; :reload
-&gt; calculateProjectReport someProject
-Report {budgetProfit = Money {unMoney = -5392.74046336179},
-netProfit = Money {unMoney = 2191.2802854168813}, difference =
-Money {unMoney = 7584.020748778671}}</code></pre>
+λ&gt; calculateProjectReport someProject
+Report {budgetProfit = Money 800, netProfit = Money -568, difference = Money -1368}</code></pre>
 </div>
 <p>Congratulations! You have completed the first part of &quot;Domain Modelling with Haskell.&quot;</p>
 <h3 id="bonus-exerices">Bonus Exerices</h3>
@@ -418,7 +416,7 @@ Money {unMoney = 7584.020748778671}}</code></pre>
 </ol>
 <p><strong>Parts 2-4 have not been added to this workshop yet.</strong> If you want to explore further, I can recommend checking out those videos and the show notes. Also, the full source code for the videos is available at <a href="https://github.com/haskell-at-work/domain-modelling-with-haskell" class="uri">https://github.com/haskell-at-work/domain-modelling-with-haskell</a>.</p>
 <h2 id="credits">Credits</h2>
-<p>A huge thanks to <a href="https://twitter.com/vbhvsgr">@vbhvsgr</a>, <a href="https://twitter.com/evanborden">@evanborden</a>, <a href="https://twitter.com/trupill">@trupill</a>, <a href="https://twitter.com/paulcadman">@paulcadman</a>, and <a href="https://twitter.com/themattchan">@themattchan</a> for proof-reading and giving feedback on this material!</p>
+<p>A huge thanks to <a href="https://twitter.com/vbhvsgr">@vbhvsgr</a>, <a href="https://twitter.com/evanborden">@evanborden</a>, <a href="https://twitter.com/trupill">@trupill</a>, <a href="https://twitter.com/paulcadman">@paulcadman</a>, <a href="https://twitter.com/themattchan">@themattchan</a>, and <a href="https://twitter.com/mathapptician">@mathapptician</a> for proof-reading and giving feedback on this material!</p>
 <script>
 document.querySelectorAll('.tip').forEach(function (tip) {
   tip.addEventListener('click', function () {
