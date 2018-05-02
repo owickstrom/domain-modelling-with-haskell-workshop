@@ -401,11 +401,29 @@ Report {budgetProfit = Money 800, netProfit = Money -568, difference = Money -13
 </div>
 <p>Congratulations! You have completed the first part of &quot;Domain Modelling with Haskell.&quot;</p>
 <h3 id="bonus-exerices">Bonus Exerices</h3>
+<ol type="1">
+<li>Create functions for pretty-printing projects and reports.
 <ul>
-<li>Render the report by creating a <a href="https://hackage.haskell.org/package/containers-0.5.11.0/docs/Data-Tree.html">Tree</a> from a report, and rendering that using <code>drawTree</code>.</li>
+<li><p>Render the project by creating a <a href="https://hackage.haskell.org/package/containers-0.5.11.0/docs/Data-Tree.html">Tree</a> from a project, and rendering that using <code>drawTree</code>. Then you can run the following in GHCI:</p>
+<pre class="sourceCode ghci"><code>&gt; putStrLn (prettyProject someProject)
+Sweden
+   |
+   +- Stockholm (1)
+   |
+   +- Gothenburg (2)
+   |
+   `- Malmö
+   |
+   +- Malmö City (3)
+   |
+   `- Limhamn (4)</code></pre></li>
+<li><p>Render the report as a string similar to this:</p>
+<pre class="sourceCode ghci"><code>&gt; putStrLn (prettyReport myReport)
+Profit: 800, Net: -568, Diff: -1368</code></pre></li>
+</ul></li>
 <li>Convert the hard-coded queries to generate random values using <a href="http://hackage.haskell.org/package/random-1.1/docs/System-Random.html">System.Random</a>.</li>
 <li>Convert the hard-coded or random-generated query results to use a real database, e.g. PostgreSQL or MySQL. Haskell has many options for working with relational databases.</li>
-</ul>
+</ol>
 <h2 id="digging-deeper">Digging Deeper</h2>
 <p>This workshop is based on the video series from Haskell at Work:</p>
 <ol type="1">

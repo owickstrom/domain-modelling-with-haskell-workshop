@@ -481,15 +481,41 @@ Modelling with Haskell."
 Bonus Exerices
 ~~~~~~~~~~~~~~
 
-* Render the report by creating a `Tree
-  <https://hackage.haskell.org/package/containers-0.5.11.0/docs/Data-Tree.html>`_
-  from a report, and rendering that using ``drawTree``.
-* Convert the hard-coded queries to generate random values using
-  `System.Random
-  <http://hackage.haskell.org/package/random-1.1/docs/System-Random.html>`_.
-* Convert the hard-coded or random-generated query results to use a
-  real database, e.g. PostgreSQL or MySQL. Haskell has many options
-  for working with relational databases.
+1. Create functions for pretty-printing projects and reports.
+
+   * Render the project by creating a `Tree
+     <https://hackage.haskell.org/package/containers-0.5.11.0/docs/Data-Tree.html>`_
+     from a project, and rendering that using ``drawTree``. Then you can
+     run the following in GHCI:
+
+     .. code:: ghci
+
+        > putStrLn (prettyProject someProject)
+        Sweden
+           |
+           +- Stockholm (1)
+           |
+           +- Gothenburg (2)
+           |
+           `- Malmö
+           |
+           +- Malmö City (3)
+           |
+           `- Limhamn (4)
+
+   * Render the report as a string similar to this:
+
+     .. code:: ghci
+
+        > putStrLn (prettyReport myReport)
+        Profit: 800, Net: -568, Diff: -1368
+
+1. Convert the hard-coded queries to generate random values using
+   `System.Random
+   <http://hackage.haskell.org/package/random-1.1/docs/System-Random.html>`_.
+1. Convert the hard-coded or random-generated query results to use a
+   real database, e.g. PostgreSQL or MySQL. Haskell has many options
+   for working with relational databases.
 
 Digging Deeper
 --------------
