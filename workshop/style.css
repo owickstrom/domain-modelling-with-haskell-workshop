@@ -57,7 +57,7 @@ pre {
 code {
   padding: 0 2px;
   line-height: 1.3;
-  background: rgba(0, 0, 0, .1);
+  background: rgba(0, 0, 0, .05);
 }
 pre code {
   overflow: auto;
@@ -111,8 +111,6 @@ body > table {
   padding: 2em;
 }
 
-$brand-color:      #e81c4f;
-$text-color:       #222222;
 a {
   color: #e81c4f;
 }
@@ -203,6 +201,9 @@ code span.co {
   font-style: italic;
   color: #666;
 }
+code span.st {
+  color: #444;
+}
 
 .admonition-title {
   text-transform: uppercase;
@@ -234,9 +235,6 @@ code span.co {
 }
 .tip:hover {
   background: #e0ffe0;
-}
-.tip p, .note p {
-  margin: .25em 0;
 }
 
 .tip > * {

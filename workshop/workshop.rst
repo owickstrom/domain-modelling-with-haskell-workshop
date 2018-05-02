@@ -145,6 +145,31 @@ Implementation
    *project IDs* (described below). A project group has a list of
    child projects.
 
+   .. note::
+
+      Represent project names using the ``Text`` data type instead of
+      the built-in ``String`` type (see `A Sticky Stringy Quandry
+      <http://www.stephendiehl.com/posts/strings.html>`_ for more
+      details). Even if you often end up in situations where you need
+      to convert back to ``String``, make a habit of using ``Text`` by
+      default.
+
+      Import the ``Data.Text`` module. Also, to be able to construct
+      ``Text`` values with regular string literals, enable the
+      ``OverloadedStrings`` language extension:
+
+      .. code:: haskell
+
+         {-# LANGUAGE OverloadedStrings          #-}
+         module Project where
+
+         import Data.Text
+
+         -- Now you can construct Text values using string literals:
+         myText :: Text
+         myText = "Hello, lovely Haskell world!"
+
+
    .. tip::
 
       A data structure with multiple variants can be expressed using a
@@ -447,18 +472,6 @@ groups.
           malmo = ProjectGroup "Malmö" [city, limhamn]
           city = SingleProject (ProjectId 3) "Malmö City"
           limhamn = SingleProject (ProjectId 4) "Limhamn"
-
-To construct ``Text`` values with regular string literals, enable the
-``OverloadedStrings`` extension:
-
-.. code:: haskell
-
-   {-# LANGUAGE OverloadedStrings          #-}
-   module Project where
-
-   -- your previous code...
-
-   someProject = ProjectGroup "My Group" []
 
 Now, go back to GHCi, reload, and apply the report calculation
 function to the ``someProject`` value. Do you get a single report
