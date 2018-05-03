@@ -526,9 +526,10 @@ Bonus Exerices
 1. Convert the hard-coded queries to generate random values using
    `System.Random
    <http://hackage.haskell.org/package/random-1.1/docs/System-Random.html>`_.
-1. Convert the hard-coded or random-generated query results to use a
-   real database, e.g. PostgreSQL or MySQL. Haskell has many options
-   for working with relational databases.
+1. One to save for for a rainy day: Convert the hard-coded or
+   random-generated query results to use a real database,
+   e.g. PostgreSQL or MySQL. Haskell has many options for working with
+   relational databases.
 
 Digging Deeper
 --------------
