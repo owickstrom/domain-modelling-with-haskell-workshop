@@ -84,6 +84,13 @@ code span.wa { font-style: italic; } /* Warning */
 <li><a href="#testing-your-implementation">Testing Your Implementation</a></li>
 <li><a href="#bonus-exerices">Bonus Exerices</a></li>
 </ul></li>
+<li><a href="#part-2-generalizing-with-foldable-and-traversable">Part 2: Generalizing with Foldable and Traversable</a><ul>
+<li><a href="#functor">Functor</a></li>
+<li><a href="#foldable-and-traversable">Foldable and Traversable</a></li>
+<li><a href="#calculating-a-hierarchy-with-reports">Calculating A Hierarchy with Reports</a></li>
+<li><a href="#folding">Folding</a></li>
+<li><a href="#testing-your-implementation-1">Testing Your Implementation</a></li>
+</ul></li>
 <li><a href="#digging-deeper">Digging Deeper</a></li>
 <li><a href="#credits">Credits</a></li>
 </ul>
@@ -433,6 +440,136 @@ Profit: 800, Net: -568, Diff: -1368</code></pre></li>
 <li>Convert the hard-coded queries to generate random values using <a href="http://hackage.haskell.org/package/random-1.1/docs/System-Random.html">System.Random</a>.</li>
 <li>One to save for for a rainy day: Convert the hard-coded or random-generated query results to use a real database, e.g. PostgreSQL or MySQL. Haskell has many options for working with relational databases.</li>
 </ol>
+<h2 id="part-2-generalizing-with-foldable-and-traversable">Part 2: Generalizing with Foldable and Traversable</h2>
+<p>In <a href="#part-1-data-structures">Part 1: Data Structures</a> we built functionality for calculating a single report for an entire project hierarchy. Management is excited about the new system, but mildly disappointed by the coarse-grained reporting. They would like to get an overview of the project hierarchy where they see reports for all individual projects.</p>
+<p>The goal of this exercise is to transform the project hierarchy, from one <em>without</em> reports to one <em>with</em> reports. You will retain the original structure of the project hierarchy, and decorate it with reports in the single project values.</p>
+<h3 id="functor">Functor</h3>
+<p>Add a type parameter <code>a</code> to the <code>Project</code> data type, and substitute the project ID field in the single project constructor for a type parameter <code>a</code>.</p>
+<div class="tip">
+<div class="admonition-title">
+<p>Tip</p>
+</div>
+<p>Type parameters are written after the name of the data type, before the equals sign, and can then be used in the types of the data constructors.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Maybe</span> a <span class="fu">=</span> <span class="dt">Just</span> a <span class="fu">|</span> <span class="dt">Nothing</span></a></code></pre></div>
+</div>
+<div class="tip">
+<div class="admonition-title">
+<p>Tip</p>
+</div>
+<p>As the project type definition is recursive, you need to apply the <code>Project</code> type constructor to the <code>a</code> when construction the list type.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Example</span> a <span class="fu">=</span> <span class="dt">Example</span> a <span class="fu">|</span> <span class="dt">ManyExamples</span> [<span class="dt">Example</span> a]</a></code></pre></div>
+</div>
+<p>Then, you will be able to derive the <code>Functor</code> instance for <code>Project</code>. With <code>Functor</code>, you get <code>fmap</code>, allowing you to map a function over the <code>a</code>s of a project hierarchy.</p>
+<div class="note">
+<div class="admonition-title">
+<p>Note</p>
+</div>
+<p>To derive a <code>Functor</code> instance, you need to enable the <code>DeriveFunctor</code> language extension.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="ot">{-# LANGUAGE DeriveFunctor #-}</span></a>
+<a class="sourceLine" id="cb31-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb31-3" data-line-number="3"><span class="co">-- other extensions, probably...</span></a>
+<a class="sourceLine" id="cb31-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="kw">module</span> <span class="dt">Project</span> <span class="kw">where</span></a>
+<a class="sourceLine" id="cb31-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb31-7" data-line-number="7"><span class="co">-- more code...</span></a></code></pre></div>
+</div>
+<div class="tip">
+<div class="admonition-title">
+<p>Tip</p>
+</div>
+<p>A definition of <code>Project</code> deriving <code>Functor</code> might look like this:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Project</span> a</a>
+<a class="sourceLine" id="cb32-2" data-line-number="2">  <span class="fu">=</span> <span class="dt">SingleProject</span> <span class="dt">Text</span> a</a>
+<a class="sourceLine" id="cb32-3" data-line-number="3">  <span class="fu">|</span> <span class="dt">ProjectGroup</span> <span class="dt">Text</span> [<span class="dt">Project</span> a]</a>
+<a class="sourceLine" id="cb32-4" data-line-number="4">  <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>, <span class="dt">Functor</span>)</a></code></pre></div>
+</div>
+<h3 id="foldable-and-traversable">Foldable and Traversable</h3>
+<p>Next, you will derive <code>Foldable</code> and <code>Traversable</code>.</p>
+<ul>
+<li><code>Foldable</code> lets you fold the project data structure into a single value, in various ways, given that the element type has a <code>Monoid</code> instance, or that you can map each element to a monoid. Folding collapses the structure.</li>
+<li><code>Traversable</code> lets you traverse the project tree and perform an action at each element. The action is usually applicative or monadic.</li>
+</ul>
+<div class="note">
+<div class="admonition-title">
+<p>Note</p>
+</div>
+<p>To derive <code>Foldable</code> and <code>Traversable</code>, you need to enable the <code>DeriveAnyClass</code> language extension.</p>
+</div>
+<div class="tip">
+<div class="admonition-title">
+<p>Tip</p>
+</div>
+<p>A definition of <code>Project</code> also deriving <code>Foldable</code> and <code>Traversable</code> might look like this:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">data</span> <span class="dt">Project</span> a</a>
+<a class="sourceLine" id="cb33-2" data-line-number="2">  <span class="fu">=</span> <span class="dt">SingleProject</span> <span class="dt">Text</span> a</a>
+<a class="sourceLine" id="cb33-3" data-line-number="3">  <span class="fu">|</span> <span class="dt">ProjectGroup</span> <span class="dt">Text</span> [<span class="dt">Project</span> a]</a>
+<a class="sourceLine" id="cb33-4" data-line-number="4">  <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Eq</span>, <span class="dt">Functor</span>, <span class="dt">Foldable</span>, <span class="dt">Traversable</span>)</a></code></pre></div>
+</div>
+<h3 id="calculating-a-hierarchy-with-reports">Calculating A Hierarchy with Reports</h3>
+<p>Instead of directly calculating a single report, you will calculate reports for each <em>single project</em>, using <code>Traversable</code>. The project will be parameterized by <code>ProjectId</code>, and what you get back will be a project parameterized by <code>Report</code>.</p>
+<p>Remove the old <code>calculateProjectReport</code>, and write a new function <code>calculateProjectReports</code> with the following type signature:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="ot">calculateProjectReports ::</span> <span class="dt">Project</span> <span class="dt">ProjectId</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> (<span class="dt">Project</span> <span class="dt">Report</span>)</a></code></pre></div>
+<p>Use <code>traverse</code> to, at each single project, calculate a report. The function you pass to <code>traverse</code> should have type <code>ProjectId -&gt; IO Report</code>.</p>
+<div class="tip">
+<div class="admonition-title">
+<p>Tip</p>
+</div>
+<p>Use the <code>calculateReport</code> function and the query functions from before in the function you pass to traverse:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb35-1" data-line-number="1">traverse</a>
+<a class="sourceLine" id="cb35-2" data-line-number="2">  (\projectId <span class="ot">-&gt;</span> calculateReport</a>
+<a class="sourceLine" id="cb35-3" data-line-number="3">                 <span class="fu">&lt;$&gt;</span> getBudget projectId</a>
+<a class="sourceLine" id="cb35-4" data-line-number="4">                 <span class="fu">&lt;*&gt;</span> getTransactions projectId)</a>
+<a class="sourceLine" id="cb35-5" data-line-number="5">  project</a></code></pre></div>
+</div>
+<p>Note how you transform a <em>pure</em> value, the project hierarchy of project IDs, using an <em>impure</em> action, and get back an <em>impure</em> action, returning a project structure of <em>pure</em> report values. This is one of the beauties of <code>Traversable</code>.</p>
+<h3 id="folding">Folding</h3>
+<p>Now that you can calculate a project of reports, you can fold together all those individual reports into a single report. Write a function <code>accumulateProjectReport</code> with the following type signature:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="ot">accumulateProjectReport ::</span> <span class="dt">Project</span> <span class="dt">Report</span> <span class="ot">-&gt;</span> <span class="dt">Report</span></a></code></pre></div>
+<div class="tip">
+<div class="admonition-title">
+<p>Tip</p>
+</div>
+<p>Use <code>fold</code> from the <code>Foldable</code> type class.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="ot">accumulateProjectReport ::</span> <span class="dt">Project</span> <span class="dt">Report</span> <span class="ot">-&gt;</span> <span class="dt">Report</span></a>
+<a class="sourceLine" id="cb37-2" data-line-number="2">accumulateProjectReport <span class="fu">=</span> fold</a></code></pre></div>
+</div>
+<h3 id="testing-your-implementation-1">Testing Your Implementation</h3>
+<p>Now that the data constructor for single projects is different, you need to adapt the definition of <code>someProject</code>. Also, if you implemented the tree printing bonus exercise, you'll need to change it.</p>
+<div class="tip">
+<div class="admonition-title">
+<p>Tip</p>
+</div>
+<p>An adapted definition of <code>someProject</code> could look like this:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="ot">someProject ::</span> <span class="dt">Project</span> <span class="dt">ProjectId</span></a>
+<a class="sourceLine" id="cb38-2" data-line-number="2">someProject <span class="fu">=</span> <span class="dt">ProjectGroup</span> <span class="st">&quot;Sweden&quot;</span> [stockholm, gothenburg, malmo]</a>
+<a class="sourceLine" id="cb38-3" data-line-number="3">  <span class="kw">where</span></a>
+<a class="sourceLine" id="cb38-4" data-line-number="4">    stockholm <span class="fu">=</span> <span class="dt">SingleProject</span> <span class="st">&quot;Stockholm&quot;</span> <span class="dv">1</span></a>
+<a class="sourceLine" id="cb38-5" data-line-number="5">    gothenburg <span class="fu">=</span> <span class="dt">SingleProject</span> <span class="st">&quot;Gothenburg&quot;</span> <span class="dv">2</span></a>
+<a class="sourceLine" id="cb38-6" data-line-number="6">    malmo <span class="fu">=</span> <span class="dt">ProjectGroup</span> <span class="st">&quot;Malmö&quot;</span> [city, limhamn]</a>
+<a class="sourceLine" id="cb38-7" data-line-number="7">    city <span class="fu">=</span> <span class="dt">SingleProject</span> <span class="st">&quot;Malmö City&quot;</span> <span class="dv">3</span></a>
+<a class="sourceLine" id="cb38-8" data-line-number="8">    limhamn <span class="fu">=</span> <span class="dt">SingleProject</span> <span class="st">&quot;Limhamn&quot;</span> <span class="dv">4</span></a></code></pre></div>
+</div>
+<p>Now, calculate a project structure of reports in GHCi:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="fu">&gt;</span> pr <span class="ot">&lt;-</span> calculateProjectReports someProject</a>
+<a class="sourceLine" id="cb39-2" data-line-number="2"><span class="fu">&gt;</span> print pr</a></code></pre></div>
+<p>And fold it into a single report:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="fu">&gt;</span> r <span class="ot">&lt;-</span> accumulateProjectReport pr</a>
+<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="fu">&gt;</span> print r</a></code></pre></div>
+<p>If you have implemented pretty printing, make sure to try your rendering. It could result in a project structure with reports looking like this:</p>
+<pre class="sourceCode ghci"><code>&gt; pr &lt;- calculateProjectReport someProject
+&gt; putStrLn (prettyProject prettyReport pr)
+Sweden
+|
++- Stockholm: Budget: 2082.92, Net: 1338.98, Difference: 3421
+|
++- Gothenburg: Budget: -3909.57, Net: -447.81, Difference: +3461
+|
+`- Malmö
+   |
+   +- Malmö City: Budget: 6544.71, Net: 1146.83, Difference: -5397.88
+   |
+   `- Limhamn: Budget: -3571.50, Net: 53.15, Difference: +3624.65</code></pre>
+<p>Cool, you have completed the second part of the workshop!</p>
 <h2 id="digging-deeper">Digging Deeper</h2>
 <p>This workshop is based on the video series from Haskell at Work:</p>
 <ol type="1">

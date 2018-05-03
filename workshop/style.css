@@ -218,7 +218,7 @@ code span.st {
   background: #fafad2;
   border: 1px dashed #8b8b00;
   padding: .5em 1em;
-  margin-bottom: 1em;
+  margin: 1em 0;
 }
 
 .tip pre.sourceCode,
@@ -231,7 +231,7 @@ code span.st {
   border: 1px dashed #32cd32;
   padding: .5em 1em;
   cursor: help;
-  margin-bottom: 1em;
+  margin: 1em 0;
 }
 .tip:hover {
   background: #e0ffe0;

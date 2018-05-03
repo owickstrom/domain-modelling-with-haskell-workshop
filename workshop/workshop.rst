@@ -531,6 +531,224 @@ Bonus Exerices
    e.g. PostgreSQL or MySQL. Haskell has many options for working with
    relational databases.
 
+Part 2: Generalizing with Foldable and Traversable
+--------------------------------------------------
+
+In `Part 1: Data Structures`_ we built functionality for calculating a
+single report for an entire project hierarchy. Management is excited
+about the new system, but mildly disappointed by the coarse-grained
+reporting. They would like to get an overview of the project
+hierarchy where they see reports for all individual projects.
+
+The goal of this exercise is to transform the project hierarchy, from
+one *without* reports to one *with* reports. You will retain the
+original structure of the project hierarchy, and decorate it with
+reports in the single project values.
+
+Functor
+~~~~~~~
+
+Add a type parameter ``a`` to the ``Project`` data type, and
+substitute the project ID field in the single project constructor for
+a type parameter ``a``.
+
+.. tip::
+
+   Type parameters are written after the name of the data type, before
+   the equals sign, and can then be used in the types of the data
+   constructors.
+
+   .. code:: haskell
+
+      data Maybe a = Just a | Nothing
+
+.. tip::
+
+   As the project type definition is recursive, you need to apply
+   the ``Project`` type constructor to the ``a`` when construction
+   the list type.
+
+   .. code:: haskell
+
+      data Example a = Example a | ManyExamples [Example a]
+
+Then, you will be able to derive the ``Functor`` instance for
+``Project``. With ``Functor``, you get ``fmap``, allowing you to map a
+function over the ``a``s of a project hierarchy.
+
+.. note::
+
+   To derive a ``Functor`` instance, you need to enable the
+   ``DeriveFunctor`` language extension.
+
+   .. code:: haskell
+
+      {-# LANGUAGE DeriveFunctor #-}
+
+      -- other extensions, probably...
+
+      module Project where
+
+      -- more code...
+
+.. tip::
+
+   A definition of ``Project`` deriving ``Functor`` might look like this:
+
+   .. code:: haskell
+
+      data Project a
+        = SingleProject Text a
+        | ProjectGroup Text [Project a]
+        deriving (Show, Eq, Functor)
+
+Foldable and Traversable
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Next, you will derive ``Foldable`` and ``Traversable``.
+
+* ``Foldable`` lets you fold the project data structure into a single
+  value, in various ways, given that the element type has a ``Monoid``
+  instance, or that you can map each element to a monoid. Folding
+  collapses the structure.
+* ``Traversable`` lets you traverse the project tree and perform an
+  action at each element. The action is usually applicative or
+  monadic.
+
+.. note::
+
+   To derive ``Foldable`` and ``Traversable``, you need to enable the
+   ``DeriveAnyClass`` language extension.
+
+.. tip::
+
+   A definition of ``Project`` also deriving ``Foldable`` and
+   ``Traversable`` might look like this:
+
+   .. code:: haskell
+
+      data Project a
+        = SingleProject Text a
+        | ProjectGroup Text [Project a]
+        deriving (Show, Eq, Functor, Foldable, Traversable)
+
+Calculating A Hierarchy with Reports
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Instead of directly calculating a single report, you will calculate
+reports for each *single project*, using ``Traversable``. The project
+will be parameterized by ``ProjectId``, and what you get back will be
+a project parameterized by ``Report``.
+
+Remove the old ``calculateProjectReport``, and write a new function
+``calculateProjectReports`` with the following type signature:
+
+.. code:: haskell
+
+   calculateProjectReports :: Project ProjectId -> IO (Project Report)
+
+Use ``traverse`` to, at each single project, calculate a report. The
+function you pass to ``traverse`` should have type ``ProjectId -> IO
+Report``.
+
+.. tip::
+
+   Use the ``calculateReport`` function and the query functions from before
+   in the function you pass to traverse:
+
+   .. code:: haskell
+
+      traverse
+        (\projectId -> calculateReport
+                       <$> getBudget projectId
+                       <*> getTransactions projectId)
+        project
+
+Note how you transform a *pure* value, the project hierarchy of
+project IDs, using an *impure* action, and get back an *impure*
+action, returning a project structure of *pure* report values. This is
+one of the beauties of ``Traversable``.
+
+Folding
+~~~~~~~
+
+Now that you can calculate a project of reports, you can fold together
+all those individual reports into a single report.
+Write a function ``accumulateProjectReport`` with the following type
+signature:
+
+.. code:: haskell
+
+   accumulateProjectReport :: Project Report -> Report
+
+.. tip::
+
+   Use ``fold`` from the ``Foldable`` type class.
+
+   .. code:: haskell
+
+       accumulateProjectReport :: Project Report -> Report
+       accumulateProjectReport = fold
+
+Testing Your Implementation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Now that the data constructor for single projects is different, you
+need to adapt the definition of ``someProject``. Also, if you
+implemented the tree printing bonus exercise, you'll need to change
+it.
+
+.. tip::
+
+   An adapted definition of ``someProject`` could look like this:
+
+   .. code:: haskell
+
+      someProject :: Project ProjectId
+      someProject = ProjectGroup "Sweden" [stockholm, gothenburg, malmo]
+        where
+          stockholm = SingleProject "Stockholm" 1
+          gothenburg = SingleProject "Gothenburg" 2
+          malmo = ProjectGroup "Malmö" [city, limhamn]
+          city = SingleProject "Malmö City" 3
+          limhamn = SingleProject "Limhamn" 4
+
+Now, calculate a project structure of reports in GHCi:
+
+.. code:: haskell
+
+   > pr <- calculateProjectReports someProject
+   > print pr
+
+And fold it into a single report:
+
+.. code:: haskell
+
+   > r <- accumulateProjectReport pr
+   > print r
+
+If you have implemented pretty printing, make sure to try your
+rendering. It could result in a project structure with reports looking
+like this:
+
+.. code:: ghci
+
+   > pr <- calculateProjectReport someProject
+   > putStrLn (prettyProject prettyReport pr)
+   Sweden
+   |
+   +- Stockholm: Budget: 2082.92, Net: 1338.98, Difference: 3421
+   |
+   +- Gothenburg: Budget: -3909.57, Net: -447.81, Difference: +3461
+   |
+   `- Malmö
+      |
+      +- Malmö City: Budget: 6544.71, Net: 1146.83, Difference: -5397.88
+      |
+      `- Limhamn: Budget: -3571.50, Net: 53.15, Difference: +3624.65
+
+Cool, you have completed the second part of the workshop!
+
 Digging Deeper
 --------------
 
